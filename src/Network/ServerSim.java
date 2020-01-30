@@ -19,7 +19,7 @@ public class ServerSim {
     public boolean initConn() {
         try {
             server = new ServerSocket(port);
-            System.out.println("Listening...");
+            System.out.println("Listening on port " + port + "...");
             return true;
         } catch (IOException e) {
             LOGGER.warning("Connection Failed: IOException\n" + e.toString());

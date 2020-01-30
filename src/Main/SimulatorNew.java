@@ -146,7 +146,7 @@ public class SimulatorNew extends Application {
         // Threads
 
         // Setting the Title and Values for the Window
-        primaryStage.setTitle("MDP Group 15");
+        primaryStage.setTitle("MDP Group 7");
         GridPane grid = new GridPane();
         GridPane controlGrid = new GridPane();
         GridPane debugGrid = new GridPane();

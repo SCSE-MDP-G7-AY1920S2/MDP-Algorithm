@@ -297,7 +297,7 @@ public class NetworkManager {
 
 
     public static void main(String[] args) throws InterruptedException {
-        String ip = "192.168.15.15";
+        String ip = "192.168.7.7";
         int port = 36126;
 
         Map exploredMap = new Map();
