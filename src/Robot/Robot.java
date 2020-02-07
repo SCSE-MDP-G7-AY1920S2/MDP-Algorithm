@@ -247,6 +247,7 @@ public class Robot {
      * @param col the location, Point x, of the robot.
      */
     public void setRobotPosition(int row, int col) {
+
         int colDiff = col - curLocation.x;
         int rowDiff = row - curLocation.y;
 
@@ -417,6 +418,8 @@ public class Robot {
     private void initSensors() {
         int row = curLocation.y;
         int col = curLocation.x;
+
+        //initialise sensors for robot
 
         // Front Sensors
         RobotSensors SF1 = new RobotSensors("F1", RobotConstants.SHORT_IR_MIN, RobotConstants.SHORT_IR_MAX, row + 1, col - 1, MapDirections.UP);
@@ -630,10 +633,12 @@ public class Robot {
         if (simulation) {
             sensorResult = updateSensorResult(realMap);
         } else {
-//            netMgr.send(getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
+//            String hardcode = "{\"com\":\"MDF\",\"fl\":-1,\"fm\":-1,\"fr\":-1,\"rt\":-1,\"rb\":-1,\"left\":-1}";
+            netMgr.send(getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
             String msg = netMgr.receive();
             System.out.println(msg);
             sensorResult = updateSensorResult(msg);
+//            sensorResult = updateSensorResult(hardcode);
         }
         return sensorResult;
     }
@@ -927,6 +932,7 @@ public class Robot {
         StringBuilder cmdStr = new StringBuilder();
 
         cmdStr.append(RoboCmd.ArduinoCtrl.values()[cmd.ordinal()]);
+
         if (steps > 0 && fastestPath) {
             cmdStr.append(steps);
             cmdStr.append(',');
@@ -944,9 +950,10 @@ public class Robot {
         if (jsonMsg.contains(NetworkConstants.START_POINT_KEY)) {
             JSONObject startPointJson = new JSONObject(new JSONTokener(jsonMsg));
             JSONArray start = startPointJson.getJSONArray(NetworkConstants.START_POINT_KEY);
-            System.out.println(start.get(0));
-            System.out.println(start.get(1));
-            System.out.println(start.get(2));
+//            System.out.println(start.get(0));
+//            System.out.println(start.get(1));
+//            System.out.println(start.get(2));
+            System.out.printf("start point: x:%d y:%d deg:%d \n" ,start.get(0),start.get(1),start.get(2));
 
             int x =  (int) start.get(0);
             int y =  (int) start.get(1);
@@ -1002,9 +1009,10 @@ public class Robot {
         if (jsonMsg.contains(NetworkConstants.WAY_POINT_KEY)) {
             JSONObject wayPointJson = new JSONObject(new JSONTokener(jsonMsg));
             JSONArray waypoint = wayPointJson.getJSONArray(NetworkConstants.WAY_POINT_KEY);
-            System.out.println(waypoint.get(0));
-            System.out.println(waypoint.get(1));
+//            System.out.println(waypoint.get(0));
+//            System.out.println(waypoint.get(1));
 
+            System.out.printf("way point: x:%d y:%d \n" ,waypoint.get(0), waypoint.get(1));
             int x = (int) waypoint.get(0);
             int y = (int) waypoint.get(1);
 

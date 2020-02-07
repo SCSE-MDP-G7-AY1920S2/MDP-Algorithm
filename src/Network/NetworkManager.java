@@ -1,6 +1,7 @@
 package Network;
 
 import Algorithm.Exploration;
+import Main.SimulatorNew;
 import Map.Map;
 import Map.MapDescriptor;
 import Robot.Robot;
@@ -11,6 +12,7 @@ import org.json.JSONTokener;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
 /**
@@ -166,7 +168,7 @@ public class NetworkManager {
 
 
             msg = cmdJson.toString();
-            msg = ";" + msg;
+//            msg = "ms;" + msg;
             out.write(msg);
             out.newLine();
             out.flush();
@@ -174,7 +176,7 @@ public class NetworkManager {
             LOGGER.info(msgCounter + " Message Sent: " + msg);
             prevMsg = msg;
 
-            System.out.print(msg);
+            System.out.println(msg);
 
             return true;
         } catch (IOException e) {
@@ -223,12 +225,14 @@ public class NetworkManager {
             out.write(msg);
             out.newLine();
             out.flush();
+//            TimeUnit.MILLISECONDS.sleep(100); //need to be removed on actual run
 
             msgCounter++;
             LOGGER.info(msgCounter + " Message Sent: " + msg);
             prevMsg = msg;
 
-            System.out.print(msg);
+            System.out.println(msg);
+
 
             return true;
         } catch (IOException e) {
@@ -277,6 +281,9 @@ public class NetworkManager {
                 System.out.println(result);
                 explore.terminateExp();
                 explore.setTerminate(true);
+
+                if(SimulatorNew.displayTimer != null)
+                    SimulatorNew.displayTimer.stop();
 
                 robot.send_android(explore.getcurrentMap(), NetworkConstants.MDF);
                 netMgr.send("H", "Ex");
