@@ -87,6 +87,8 @@ public class FastestPath {
                 }
             }
         }
+        System.out.println();
+
     }
 
     public boolean canPassThrough(MapGrid grid) {

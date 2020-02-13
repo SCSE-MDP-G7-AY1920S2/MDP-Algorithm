@@ -174,15 +174,10 @@ public class Exploration {
         stopTime = startTime + timeLimit;
 
         exploredPercentage = currentMap.getPercentageExplored();
-//        robot.setFastestPath(false);
-//        exploredPercentage < explorationLimit &&
-//!backToStart &&
-                                                        // comment here
+
         while ((System.currentTimeMillis() < stopTime) &&  backToStartTimes < 2) {
             exploredPercentage = currentMap.getPercentageExplored();
 
-//            disableUnnecessaryEntry();
-//            stitch();
             antiStuck();
             calibrate_every_x_steps();
             rightWallHug();
@@ -328,45 +323,45 @@ public class Exploration {
 //    }
 
 
-    public void stitch() throws InterruptedException{
-        Stack<RoboCmd> stack = new Stack<RoboCmd>();
-        RoboCmd cmd;
-
-        if (requireStitch()) {
-            robot.turn(RoboCmd.LEFT_TURN,1);
-            robot.sense(currentMap, realMap);
-
-            if (movable(robot.getDir())) {
-                stack.push(RoboCmd.LEFT_TURN);
-                while (movable(robot.getDir())) {
-                    stack.push(RoboCmd.FORWARD);
-                    robot.move(RoboCmd.FORWARD, 1, currentMap, 1);
-                    robot.sense(currentMap, realMap);
-                }
-                robot.turn(RoboCmd.RIGHT_TURN,1);
-                robot.sense(currentMap, realMap);
-
-                robot.turn(RoboCmd.RIGHT_TURN,1);
-                robot.sense(currentMap, realMap);
-
-            } else {
-                stack.push(RoboCmd.RIGHT_TURN);
-            }
-
-            while (!stack.isEmpty()) {
-                cmd = stack.pop();
-                if (cmd == RoboCmd.LEFT_TURN || cmd == RoboCmd.RIGHT_TURN){
-                    robot.turn(cmd, 1);
-                    robot.sense(currentMap, realMap);
-
-                } else {
-                    robot.move(cmd, 1,currentMap,1);
-                    robot.sense(currentMap, realMap);
-
-                }
-            }
-        }
-    }
+//    public void stitch() throws InterruptedException{
+//        Stack<RoboCmd> stack = new Stack<RoboCmd>();
+//        RoboCmd cmd;
+//
+//        if (requireStitch()) {
+//            robot.turn(RoboCmd.LEFT_TURN,1);
+//            robot.sense(currentMap, realMap);
+//
+//            if (movable(robot.getDir())) {
+//                stack.push(RoboCmd.LEFT_TURN);
+//                while (movable(robot.getDir())) {
+//                    stack.push(RoboCmd.FORWARD);
+//                    robot.move(RoboCmd.FORWARD, 1, currentMap, 1);
+//                    robot.sense(currentMap, realMap);
+//                }
+//                robot.turn(RoboCmd.RIGHT_TURN,1);
+//                robot.sense(currentMap, realMap);
+//
+//                robot.turn(RoboCmd.RIGHT_TURN,1);
+//                robot.sense(currentMap, realMap);
+//
+//            } else {
+//                stack.push(RoboCmd.RIGHT_TURN);
+//            }
+//
+//            while (!stack.isEmpty()) {
+//                cmd = stack.pop();
+//                if (cmd == RoboCmd.LEFT_TURN || cmd == RoboCmd.RIGHT_TURN){
+//                    robot.turn(cmd, 1);
+//                    robot.sense(currentMap, realMap);
+//
+//                } else {
+//                    robot.move(cmd, 1,currentMap,1);
+//                    robot.sense(currentMap, realMap);
+//
+//                }
+//            }
+//        }
+//    }
 
     public boolean stuckInLoop(){
         if (movement.size() >= 4)
@@ -398,246 +393,246 @@ public class Exploration {
         calibrate();
     }
 
-    public boolean frontMovable() {
-        MapDirections dir = robot.getDir();
-
-        int rowInc = 0, colInc = 0;
-
-        switch (dir){
-            case UP:
-                rowInc = 1;
-                colInc = 0;
-                break;
-            case DOWN:
-                rowInc = -1;
-                colInc = 0;
-                break;
-            case LEFT:
-                rowInc = 0;
-                colInc = -1;
-                break;
-            case RIGHT:
-                rowInc = 0;
-                colInc = 1;
-                break;
-        }
-
-        Point F1_pos = robot.getSensorMap().get("F1").getPos();
-        Point F2_pos = robot.getSensorMap().get("F2").getPos();
-        Point F3_pos = robot.getSensorMap().get("F3").getPos();
-
-        int F1Y = F1_pos.y;
-        int F2Y = F2_pos.y;
-        int F3Y = F3_pos.y;
-
-        int F1X = F1_pos.x;
-        int F2X = F2_pos.x;
-        int F3X = F3_pos.x;
-
-//        for (int i = 1 ; i <= RobotConstants.LONG_IR_MAX ; i++){
-            F1Y += rowInc;
-            F2Y += rowInc;
-            F3Y += rowInc;
-
-            F1X += colInc;
-            F2X += colInc;
-            F3X += colInc;
-
-            if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
-                if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
-                        && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
-                    return true;
-                }
-            }
+//    public boolean frontMovable() {
+//        MapDirections dir = robot.getDir();
+//
+//        int rowInc = 0, colInc = 0;
+//
+//        switch (dir){
+//            case UP:
+//                rowInc = 1;
+//                colInc = 0;
+//                break;
+//            case DOWN:
+//                rowInc = -1;
+//                colInc = 0;
+//                break;
+//            case LEFT:
+//                rowInc = 0;
+//                colInc = -1;
+//                break;
+//            case RIGHT:
+//                rowInc = 0;
+//                colInc = 1;
+//                break;
 //        }
-        return false;
-    }
+//
+//        Point F1_pos = robot.getSensorMap().get("F1").getPos();
+//        Point F2_pos = robot.getSensorMap().get("F2").getPos();
+//        Point F3_pos = robot.getSensorMap().get("F3").getPos();
+//
+//        int F1Y = F1_pos.y;
+//        int F2Y = F2_pos.y;
+//        int F3Y = F3_pos.y;
+//
+//        int F1X = F1_pos.x;
+//        int F2X = F2_pos.x;
+//        int F3X = F3_pos.x;
+//
+////        for (int i = 1 ; i <= RobotConstants.LONG_IR_MAX ; i++){
+//            F1Y += rowInc;
+//            F2Y += rowInc;
+//            F3Y += rowInc;
+//
+//            F1X += colInc;
+//            F2X += colInc;
+//            F3X += colInc;
+//
+//            if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+//                if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
+//                        && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
+//                    return true;
+//                }
+//            }
+////        }
+//        return false;
+//    }
 
-    public void disableUnnecessaryEntry(){
-        if (frontUnmovable(robot.getDir()) != null) {
-            MapDirections dir = robot.getDir();
-            setVirtualWall(dir, frontUnmovable(robot.getDir()));
-        }
-    }
+//    public void disableUnnecessaryEntry(){
+//        if (frontUnmovable(robot.getDir()) != null) {
+//            MapDirections dir = robot.getDir();
+//            setVirtualWall(dir, frontUnmovable(robot.getDir()));
+//        }
+//    }
 
-    public boolean requireStitch() {
-        RobotSensors L1 = robot.getSensorMap().get("L1");
-        Point L1_pos = L1.getPos();
+//    public boolean requireStitch() {
+//        RobotSensors L1 = robot.getSensorMap().get("L1");
+//        Point L1_pos = L1.getPos();
+//
+//        MapDirections sDir = L1.getSensorDir();
+//
+//        int colInc=0, rowInc=0;
+//        MapDirections neighbourDir = MapDirections.UP;
+//
+//        switch (sDir) {
+//            case UP:
+//                colInc = 0;
+//                rowInc = 1;
+//                neighbourDir = MapDirections.LEFT;
+//                break;
+//            case DOWN:
+//                colInc = 0;
+//                rowInc = -1;
+//                neighbourDir = MapDirections.RIGHT;
+//                break;
+//            case LEFT:
+//                colInc = -1;
+//                rowInc = 0;
+//                neighbourDir = MapDirections.DOWN;
+//                break;
+//            case RIGHT:
+//                colInc = 1;
+//                rowInc = 0;
+//                neighbourDir = MapDirections.UP;
+//                break;
+//        }
+//
+//        MapGrid g = null;
+//        int row = L1_pos.y;
+//        int col = L1_pos.x;
+//        for (int i = 1 ; i <= RobotConstants.LONG_IR_MAX; i++) {
+//            row = L1_pos.y + rowInc * i;
+//            col = L1_pos.x + colInc * i;
+//            if (currentMap.checkValidGrid(row, col)) {
+//                if (currentMap.getGrid(row, col).getExplored())
+//                    if (currentMap.getGrid(row, col).isObstacles()){
+//                        if (currentMap.isStaircase(currentMap.getGrid(row, col))) {
+//                            return true;
+//                        }
+//                    }
+//            }
+//        }
+//        return false;
+//    }
 
-        MapDirections sDir = L1.getSensorDir();
-
-        int colInc=0, rowInc=0;
-        MapDirections neighbourDir = MapDirections.UP;
-
-        switch (sDir) {
-            case UP:
-                colInc = 0;
-                rowInc = 1;
-                neighbourDir = MapDirections.LEFT;
-                break;
-            case DOWN:
-                colInc = 0;
-                rowInc = -1;
-                neighbourDir = MapDirections.RIGHT;
-                break;
-            case LEFT:
-                colInc = -1;
-                rowInc = 0;
-                neighbourDir = MapDirections.DOWN;
-                break;
-            case RIGHT:
-                colInc = 1;
-                rowInc = 0;
-                neighbourDir = MapDirections.UP;
-                break;
-        }
-
-        MapGrid g = null;
-        int row = L1_pos.y;
-        int col = L1_pos.x;
-        for (int i = 1 ; i <= RobotConstants.LONG_IR_MAX; i++) {
-            row = L1_pos.y + rowInc * i;
-            col = L1_pos.x + colInc * i;
-            if (currentMap.checkValidGrid(row, col)) {
-                if (currentMap.getGrid(row, col).getExplored())
-                    if (currentMap.getGrid(row, col).isObstacles()){
-                        if (currentMap.isStaircase(currentMap.getGrid(row, col))) {
-                            return true;
-                        }
-                    }
-            }
-        }
-        return false;
-    }
-
-    public MapGrid frontUnmovable(MapDirections dir) {
-
-        if (!(robot.isWallOnRight() || robot.isWallOnLeft()))
-            return null;
-
-        Point F1_pos = robot.getSensorMap().get("F1").getPos();
-        Point F2_pos = robot.getSensorMap().get("F2").getPos();
-        Point F3_pos = robot.getSensorMap().get("F3").getPos();
-
-        int F1Y = F1_pos.y;
-        int F2Y = F2_pos.y;
-        int F3Y = F3_pos.y;
-
-        int F1X = F1_pos.x;
-        int F2X = F2_pos.x;
-        int F3X = F3_pos.x;
-
-        MapGrid g = null;
-        MapGrid canPassGrid = null;
-        switch (dir) {
-            case UP:
-                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
-                    F1Y++;
-                    F2Y++;
-                    F3Y++;
-
-                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
-                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
-                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
-                            if (robot.isWallOnRight()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.LEFT);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x-2);
-                            } else if (robot.isWallOnLeft()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.RIGHT);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x+2);
-                            }
-                        }
-                    }
-
-                }
-                if (canPassGrid != null)
-                    if(!currentMap.canPassThrough(canPassGrid))
-                        return canPassGrid;
-                break;
-            case DOWN:
-                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
-                    F1Y--;
-                    F2Y--;
-                    F3Y--;
-
-                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
-                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
-                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
-                            if (robot.isWallOnRight()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.RIGHT);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x+2);
-                            } else if (robot.isWallOnLeft()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.LEFT);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x-2);
-                            }
-                        }
-                    }
-
-                }
-                if (canPassGrid != null)
-                    if(!currentMap.canPassThrough(canPassGrid))
-                        return canPassGrid;
-                break;
-            case LEFT:
-                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
-                    F1X--;
-                    F2X--;
-                    F3X--;
-
-                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
-                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
-                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
-                            if (robot.isWallOnRight()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.DOWN);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x+2);
-                            } else if (robot.isWallOnLeft()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.UP);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x+2);
-                            }
-                        }
-                    }
-
-                }
-                if (canPassGrid != null)
-                    if(!currentMap.canPassThrough(canPassGrid))
-                        return canPassGrid;
-                break;
-            case RIGHT:
-                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
-                    F1X++;
-                    F2X++;
-                    F3X++;
-
-                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
-                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
-                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
-                            if (robot.isWallOnRight()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.UP);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x-2);
-                            } else if (robot.isWallOnLeft()) {
-                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.DOWN);
-                                if (g != null)
-                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x-2);
-                            }
-                        }
-                    }
-
-                }
-                if (canPassGrid != null)
-                    if(!currentMap.canPassThrough(canPassGrid))
-                        return canPassGrid;
-                break;
-        }
-
-        return null;
-    }
+//    public MapGrid frontUnmovable(MapDirections dir) {
+//
+//        if (!(robot.isWallOnRight() || robot.isWallOnLeft()))
+//            return null;
+//
+//        Point F1_pos = robot.getSensorMap().get("F1").getPos();
+//        Point F2_pos = robot.getSensorMap().get("F2").getPos();
+//        Point F3_pos = robot.getSensorMap().get("F3").getPos();
+//
+//        int F1Y = F1_pos.y;
+//        int F2Y = F2_pos.y;
+//        int F3Y = F3_pos.y;
+//
+//        int F1X = F1_pos.x;
+//        int F2X = F2_pos.x;
+//        int F3X = F3_pos.x;
+//
+//        MapGrid g = null;
+//        MapGrid canPassGrid = null;
+//        switch (dir) {
+//            case UP:
+//                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
+//                    F1Y++;
+//                    F2Y++;
+//                    F3Y++;
+//
+//                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+//                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
+//                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
+//                            if (robot.isWallOnRight()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.LEFT);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x-2);
+//                            } else if (robot.isWallOnLeft()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.RIGHT);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x+2);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (canPassGrid != null)
+//                    if(!currentMap.canPassThrough(canPassGrid))
+//                        return canPassGrid;
+//                break;
+//            case DOWN:
+//                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
+//                    F1Y--;
+//                    F2Y--;
+//                    F3Y--;
+//
+//                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+//                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
+//                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
+//                            if (robot.isWallOnRight()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.RIGHT);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x+2);
+//                            } else if (robot.isWallOnLeft()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.LEFT);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x-2);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (canPassGrid != null)
+//                    if(!currentMap.canPassThrough(canPassGrid))
+//                        return canPassGrid;
+//                break;
+//            case LEFT:
+//                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
+//                    F1X--;
+//                    F2X--;
+//                    F3X--;
+//
+//                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+//                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
+//                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
+//                            if (robot.isWallOnRight()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.DOWN);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x+2);
+//                            } else if (robot.isWallOnLeft()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.UP);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x+2);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (canPassGrid != null)
+//                    if(!currentMap.canPassThrough(canPassGrid))
+//                        return canPassGrid;
+//                break;
+//            case RIGHT:
+//                for (int i= 0; i <= RobotConstants.LONG_IR_MAX ; i++) {
+//                    F1X++;
+//                    F2X++;
+//                    F3X++;
+//
+//                    if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+//                        if ((currentMap.getGrid(F1Y, F1X).isObstacles() || currentMap.getGrid(F2Y, F2X).isObstacles() || currentMap.getGrid(F3Y, F3X).isObstacles())
+//                                && currentMap.getGrid(F1Y, F1X).getExplored() && currentMap.getGrid(F2Y, F2X).getExplored() && currentMap.getGrid(F3Y, F3X).getExplored()) {
+//                            if (robot.isWallOnRight()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F1X), MapDirections.UP);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y+2, g.getPos().x-2);
+//                            } else if (robot.isWallOnLeft()) {
+//                                g = currentMap.getDirNeighbour(currentMap.getGrid(F1Y,F3X), MapDirections.DOWN);
+//                                if (g != null)
+//                                    canPassGrid = currentMap.getGrid(g.getPos().y-2, g.getPos().x-2);
+//                            }
+//                        }
+//                    }
+//
+//                }
+//                if (canPassGrid != null)
+//                    if(!currentMap.canPassThrough(canPassGrid))
+//                        return canPassGrid;
+//                break;
+//        }
+//
+//        return null;
+//    }
 
     public boolean movable(MapDirections dir) {
         boolean isMovable = false;
@@ -663,9 +658,6 @@ public class Exploration {
     }
 
     public void rightWallHug() throws InterruptedException{
-        String msg;
-
-
         if (movable(MapDirections.getClockwise(robot.getDir())))
         {
             robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
@@ -713,8 +705,6 @@ public class Exploration {
     }
 
     public void moveForward() throws InterruptedException {
-//        disableUnnecessaryEntry();
-        String msg;
         if (movable(robot.getDir())) {
             robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
             robot.sense(currentMap, realMap);
@@ -731,7 +721,6 @@ public class Exploration {
             robot.sense(currentMap, realMap);
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
-
         }
     }
 
@@ -818,78 +807,78 @@ public class Exploration {
         }
     }
 
-    public void setVirtualWall(MapDirections dir, MapGrid obstacles){
-        Point curLoc = robot.getCurLocation();
-
-        int tmpX = curLoc.x;
-        int tmpY = curLoc.y;
-
-        switch (dir){
-            case UP:
-                if (robot.isWallOnRight()){
-                    tmpX++;
-                    while (obstacles.getPos().x != tmpX) {
-                        currentMap.getGrid(tmpY + 1,tmpX).setVirtualWall(true);
-                        tmpX--;
-                    }
-                } else if (robot.isWallOnLeft()){
-                    tmpX--;
-                    while (obstacles.getPos().x != tmpX) {
-                        currentMap.getGrid(tmpY + 1,tmpX).setVirtualWall(true);
-                        tmpX++;
-                    }
-                }
-                break;
-            case DOWN:
-                if (robot.isWallOnRight()){
-                    tmpX--;
-                    while (obstacles.getPos().x != tmpX) {
-                        currentMap.getGrid(tmpY - 1,tmpX).setVirtualWall(true);
-                        tmpX++;
-                    }
-                } else if (robot.isWallOnLeft()){
-                    tmpX++;
-                    while (obstacles.getPos().x != tmpX) {
-                        currentMap.getGrid(tmpY - 1,tmpX).setVirtualWall(true);
-                        tmpX--;
-                    }
-                }
-                break;
-            case LEFT:
-                if (robot.isWallOnRight()){
-                    tmpY++;
-                    while (obstacles.getPos().y != tmpY) {
-                        currentMap.getGrid(tmpY, tmpX - 1).setVirtualWall(true);
-//                        currentMap.getGrid(tmpY, tmpX- 2).setObstacles(true);
-                        tmpY--;
-                    }
-                } else {
-                    tmpY--;
-                    while (obstacles.getPos().y != tmpY) {
-                        currentMap.getGrid(tmpY, tmpX - 1).setVirtualWall(true);
-//                        currentMap.getGrid(tmpY, tmpX- 2).setObstacles(true);
-                        tmpY++;
-                    }
-                }
-                break;
-            case RIGHT:
-                if (robot.isWallOnRight()){
-                    tmpY--;
-                    while (obstacles.getPos().y != tmpY) {
-                        currentMap.getGrid(tmpY, tmpX + 1).setVirtualWall(true);
-//                        currentMap.getGrid(tmpY, tmpX + 2).setObstacles(true);
-                        tmpY++;
-                    }
-                } else {
-                    tmpY++;
-                    while (obstacles.getPos().y != tmpY) {
-                        currentMap.getGrid(tmpY, tmpX + 1).setVirtualWall(true);
-//                        currentMap.getGrid(tmpY, tmpX + 2).setObstacles(true);
-                        tmpY--;
-                    }
-                }
-                break;
-        }
-    }
+//    public void setVirtualWall(MapDirections dir, MapGrid obstacles){
+//        Point curLoc = robot.getCurLocation();
+//
+//        int tmpX = curLoc.x;
+//        int tmpY = curLoc.y;
+//
+//        switch (dir){
+//            case UP:
+//                if (robot.isWallOnRight()){
+//                    tmpX++;
+//                    while (obstacles.getPos().x != tmpX) {
+//                        currentMap.getGrid(tmpY + 1,tmpX).setVirtualWall(true);
+//                        tmpX--;
+//                    }
+//                } else if (robot.isWallOnLeft()){
+//                    tmpX--;
+//                    while (obstacles.getPos().x != tmpX) {
+//                        currentMap.getGrid(tmpY + 1,tmpX).setVirtualWall(true);
+//                        tmpX++;
+//                    }
+//                }
+//                break;
+//            case DOWN:
+//                if (robot.isWallOnRight()){
+//                    tmpX--;
+//                    while (obstacles.getPos().x != tmpX) {
+//                        currentMap.getGrid(tmpY - 1,tmpX).setVirtualWall(true);
+//                        tmpX++;
+//                    }
+//                } else if (robot.isWallOnLeft()){
+//                    tmpX++;
+//                    while (obstacles.getPos().x != tmpX) {
+//                        currentMap.getGrid(tmpY - 1,tmpX).setVirtualWall(true);
+//                        tmpX--;
+//                    }
+//                }
+//                break;
+//            case LEFT:
+//                if (robot.isWallOnRight()){
+//                    tmpY++;
+//                    while (obstacles.getPos().y != tmpY) {
+//                        currentMap.getGrid(tmpY, tmpX - 1).setVirtualWall(true);
+////                        currentMap.getGrid(tmpY, tmpX- 2).setObstacles(true);
+//                        tmpY--;
+//                    }
+//                } else {
+//                    tmpY--;
+//                    while (obstacles.getPos().y != tmpY) {
+//                        currentMap.getGrid(tmpY, tmpX - 1).setVirtualWall(true);
+////                        currentMap.getGrid(tmpY, tmpX- 2).setObstacles(true);
+//                        tmpY++;
+//                    }
+//                }
+//                break;
+//            case RIGHT:
+//                if (robot.isWallOnRight()){
+//                    tmpY--;
+//                    while (obstacles.getPos().y != tmpY) {
+//                        currentMap.getGrid(tmpY, tmpX + 1).setVirtualWall(true);
+////                        currentMap.getGrid(tmpY, tmpX + 2).setObstacles(true);
+//                        tmpY++;
+//                    }
+//                } else {
+//                    tmpY++;
+//                    while (obstacles.getPos().y != tmpY) {
+//                        currentMap.getGrid(tmpY, tmpX + 1).setVirtualWall(true);
+////                        currentMap.getGrid(tmpY, tmpX + 2).setObstacles(true);
+//                        tmpY--;
+//                    }
+//                }
+//                break;
+//        }
+//    }
 
 }

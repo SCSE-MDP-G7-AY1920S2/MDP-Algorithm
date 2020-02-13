@@ -276,20 +276,20 @@ public class NetworkManager {
             if (msg.has("com"))
                 result = msg.getString("com");
 
-            if (result.equals("T")) {
-                System.out.println(msg);
-                System.out.println(result);
-                explore.terminateExp();
-                explore.setTerminate(true);
-
-                if(SimulatorNew.displayTimer != null)
-                    SimulatorNew.displayTimer.stop();
-
-                robot.send_android(explore.getcurrentMap(), NetworkConstants.MDF);
-                netMgr.send("H", "Ex");
-
-                receivedMsg = receive();
-            }
+//            if (result.equals("T")) {
+//                System.out.println(msg);
+//                System.out.println(result);
+//                explore.terminateExp();
+//                explore.setTerminate(true);
+//
+//                if(SimulatorNew.displayTimer != null)
+//                    SimulatorNew.displayTimer.stop();
+//
+//                robot.send_android(explore.getcurrentMap(), NetworkConstants.MDF);
+//                netMgr.send("H", "Ex");
+//
+//                receivedMsg = receive();
+//            }
 
             return receivedMsg;
         } catch (IOException e) {
