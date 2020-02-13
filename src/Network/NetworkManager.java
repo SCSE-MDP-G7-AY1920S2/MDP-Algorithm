@@ -168,7 +168,7 @@ public class NetworkManager {
 
 
             msg = cmdJson.toString();
-//            msg = "ms;" + msg;
+            msg = ";" + msg;
             out.write(msg);
             out.newLine();
             out.flush();

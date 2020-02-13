@@ -740,6 +740,7 @@ public class Exploration {
                 msg = netMgr.receive();
                 LOGGER.info(msg);
             } while (!msg.contains(NetworkConstants.CALI_FIN));
+            System.out.println("come out of align loop");
         }
     }
 

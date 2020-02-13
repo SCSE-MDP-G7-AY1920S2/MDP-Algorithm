@@ -636,7 +636,7 @@ public class Robot {
 //            String hardcode = "{\"com\":\"MDF\",\"fl\":-1,\"fm\":-1,\"fr\":-1,\"rt\":-1,\"rb\":-1,\"left\":-1}";
             netMgr.send(getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
             String msg = netMgr.receive();
-            System.out.println(msg);
+            System.out.println("sensor message = " + msg);
             sensorResult = updateSensorResult(msg);
 //            sensorResult = updateSensorResult(hardcode);
         }
@@ -675,7 +675,7 @@ public class Robot {
         sensorStrings.put("F2", (int) sensorResult.get("fm"));
         sensorStrings.put("F3", (int) sensorResult.get("fr"));
 
-        sensorStrings.put("R1", (int) sensorResult.get("rt"));
+        sensorStrings.put("R1", (int) sensorResult.get("rf"));
         sensorStrings.put("R2", (int) sensorResult.get("rb"));
         sensorStrings.put("L1", (int) sensorResult.get("left"));
 
