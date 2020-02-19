@@ -38,9 +38,12 @@ import javafx.animation.AnimationTimer;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
@@ -57,6 +60,7 @@ import org.json.JSONTokener;
 public class SimulatorNew extends Application {
 
     private static final Logger LOGGER = Logger.getLogger(SimulatorNew.class.getName());
+
 
     // Program Variables
     private Map map; // Used to hold loaded Map for sim
@@ -917,7 +921,21 @@ public class SimulatorNew extends Application {
     }
 
     public static void main(String[] args) {
+//        FileHandler fh;
+//
+//        try{
+//            // This block configure the logger with handler and formatter
+//            fh = new FileHandler("C:/Users/jorda/Documents/GitHub/MDP-Algorithm/logs/log_test.log");
+//            LOGGER.addHandler(fh);
+//            SimpleFormatter formatter = new SimpleFormatter();
+//            fh.setFormatter(formatter);
+//        } catch (SecurityException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         launch(args);
+
     }
 
     // Mouse Event Handler for clicking and detecting Location
