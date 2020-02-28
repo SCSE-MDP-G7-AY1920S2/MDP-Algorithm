@@ -175,7 +175,7 @@ public class Exploration {
 
         exploredPercentage = currentMap.getPercentageExplored();
 
-        while ((System.currentTimeMillis() < stopTime) &&  backToStartTimes < 2) {
+        while ((System.currentTimeMillis() < stopTime) &&  backToStartTimes < 2) { // Run twice or once?
             exploredPercentage = currentMap.getPercentageExplored();
 
             antiStuck();

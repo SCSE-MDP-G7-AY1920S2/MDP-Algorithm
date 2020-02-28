@@ -5,6 +5,10 @@ import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -18,14 +22,32 @@ public class FileManager {
     private static final String jsonStr = "{"+
             "\"com\": \"z\"," +
             "\"from\": \"Rpi\"," +
-            "\"images\": [{" +
-                "\"base64\": \""+base64+"\"," +
-                "\"id\": 12" +
-            "},{" +
+            "\"images\": [" +
+            "{" +
                 "\"base64\": \""+base64s+"\"," +
-                "\"id\": 10" +
-            "}]" +
-            "}";
+                "\"id\": 1" +
+            "}" +
+//            "{" +
+//                "\"base64\": \""+base64+"\"," +
+//                "\"id\": 2" +
+//            "}," +
+//            "{" +
+//                "\"base64\": \""+base64+"\"," +
+//                "\"id\": 3" +
+//            "}," +
+//            "{" +
+//                "\"base64\": \""+base64+"\"," +
+//                "\"id\": 4" +
+//            "}," +
+//            "{" +
+//                "\"base64\": \""+base64+"\"," +
+//                "\"id\": 5" +
+//            "}," +
+//            "{" +
+//                "\"base64\": \""+base64s+"\"," +
+//                "\"id\": 10" +
+//            "}"+
+            "]}";
 
     private String folderPath;
     private ObservableList observerList;
@@ -53,9 +75,12 @@ public class FileManager {
         if (msg.has("images")) {
             JSONArray arr = msg.getJSONArray("images");
 
-            for(int i=0; i<arr.length(); i++){
-                JSONObject obj = arr.getJSONObject(i);
-                int id = obj.getInt("id");
+//            for(int i=0; i<arr.length(); i++){
+            for(int i=0; i<5; i++){
+//                JSONObject obj = arr.getJSONObject(i);
+                JSONObject obj = arr.getJSONObject(0);
+//                int id = obj.getInt("id");
+                int id = i;
                 String image = obj.getString("base64");
 
                 try {
@@ -112,6 +137,29 @@ public class FileManager {
         }
     }
 
+    public void generateTileImage() throws IOException {
+        System.out.println("generateTileImage()...");
+        File folder = new File(this.folderPath.replace("\\", "/"));
+        File[] listOfFiles = folder.listFiles();
 
-
+        BufferedImage result = new BufferedImage(1600, 900, BufferedImage.TYPE_INT_RGB);
+        Graphics g = result.getGraphics();
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < 3; i++) {
+            BufferedImage bi = ImageIO.read(listOfFiles[i]);
+            g.drawImage(bi, x, y, null);
+            x += 500;
+        }
+        x = 300;
+        y = 450;
+        for (int i = 3; i < 5; i++) {
+            BufferedImage bi = ImageIO.read(listOfFiles[i]);
+            g.drawImage(bi, x, y, null);
+            x += 500;
+        }
+        String resultPath = this.folderPath + "\\tiledImage.jpg";
+        ImageIO.write(result,"jpg",new File(resultPath));
+        System.out.println(resultPath);
+    }
 }

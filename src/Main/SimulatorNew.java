@@ -516,18 +516,18 @@ public class SimulatorNew extends Application {
                 imgListView = new ListView();
 
                 //img data
-                olImgItems = fileManager.getObserverList();
+//                olImgItems = fileManager.getObserverList();
 
-                imgListView.setItems(olImgItems);
+//                imgListView.setItems(olImgItems);
 
-                image = fileManager.generateImageFromPath(olImgItems.get(0));
+                image = fileManager.generateImageFromPath("tiledImage.jpg");
                 imageView = new ImageView();
 
-                imageView.setX(50);
-                imageView.setY(25);
+                imageView.setX(0);
+                imageView.setY(0);
                 //setting the fit height and width of the image view
-                imageView.setFitHeight(550);
-                imageView.setFitWidth(400);
+                imageView.setFitHeight(900);
+                imageView.setFitWidth(1600);
                 //Setting the preserve ratio of the image view
                 imageView.setPreserveRatio(true);
 
@@ -535,20 +535,20 @@ public class SimulatorNew extends Application {
                     imageView.setImage(image);
 
                 //insert cancel btn
-                cancelBtn.setMinWidth(vBox.getPrefWidth());
-                vBox.getChildren().addAll(cancelBtn);
-                buttonGrid.add(cancelBtn, 3, 1);
+//                cancelBtn.setMinWidth(vBox.getPrefWidth());
+//                vBox.getChildren().addAll(cancelBtn);
+//                buttonGrid.add(cancelBtn, 3, 1);
 
                 ColumnConstraints col1 = new ColumnConstraints();
                 col1.setPercentWidth(0);
-                ColumnConstraints col2 = new ColumnConstraints();
-                col2.setPercentWidth(10);
-                buttonGrid.getColumnConstraints().setAll(col1, col2);
+//                ColumnConstraints col2 = new ColumnConstraints();
+//                col2.setPercentWidth(10);
+                buttonGrid.getColumnConstraints().setAll(col1);
 
-                listViewGrid.add(imgListView, 0, 0);
-                listViewGrid.add(buttonGrid, 0, 1);
+//                listViewGrid.add(imgListView, 0, 0);
+//                listViewGrid.add(buttonGrid, 0, 1);
                 listViewGrid.add(imageView, 1, 0);
-                dialogScene = new Scene(listViewGrid, 800, 600);
+                dialogScene = new Scene(listViewGrid, 1800, 1000);
 
                 //insert list view cell
                 imgListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
@@ -561,7 +561,6 @@ public class SimulatorNew extends Application {
                 imgListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
                             public void changed(ObservableValue<? extends String> ov,
                                                 String old_val, String new_val) {
-                                System.out.println(new_val);
                                 image = fileManager.generateImageFromPath(new_val);
                                 imageView.setImage(image);
 
@@ -1050,7 +1049,7 @@ public class SimulatorNew extends Application {
 //        FileHandler fh;
 //
 //        try{
-//            // This block configure the logger with handler and formatter
+//            // This block configure the logger with handler and formatterR
 //            fh = new FileHandler("C:/Users/jorda/Documents/GitHub/MDP-Algorithm/logs/log_test.log");
 //            LOGGER.addHandler(fh);
 //            SimpleFormatter formatter = new SimpleFormatter();
@@ -1682,8 +1681,9 @@ public class SimulatorNew extends Application {
 
             //for testing
             if(sim){
-
                 fileManager.jsonToImage("json msg");
+                // Generate tile image
+                fileManager.generateTileImage();;
             }
 
             if (!sim) {
