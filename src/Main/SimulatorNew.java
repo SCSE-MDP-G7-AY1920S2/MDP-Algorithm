@@ -15,10 +15,13 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,6 +30,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +43,8 @@ import javafx.animation.AnimationTimer;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +58,7 @@ import javafx.scene.shape.Rectangle;
 import static java.lang.Math.abs;
 
 import Helper.*;
+import javafx.util.Callback;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -79,6 +87,8 @@ public class SimulatorNew extends Application {
     public static DisplayTimer displayTimer = new DisplayTimer();
 
     private MapDescriptor mapDescriptor = new MapDescriptor();
+
+    public FileManager fileManager = new FileManager();
     private String defaultMapPath = "defaultMap.txt";
 
     private static final NetworkManager netMgr = NetworkManager.getInstance();
@@ -112,7 +122,7 @@ public class SimulatorNew extends Application {
     private GraphicsContext newGC;
 
     // UI components
-    private Button loadMapBtn, newMapBtn, saveMapBtn, resetMapBtn, startBtn, connectBtn, setWaypointBtn, setRobotBtn,
+    private Button loadMapBtn, newMapBtn, saveMapBtn, resetMapBtn, startBtn, showImgBtn, connectBtn, setWaypointBtn, setRobotBtn,
             setObstacleBtn, cancelBtn, confirmBtn;
     private RadioButton expRB, fastPathRB, imageRB, simRB, realRB, upRB, downRB, leftRB, rightRB, doingIsland, notDoingIsland;
     private ToggleGroup mode, task, startDir, islandMode;
@@ -124,7 +134,12 @@ public class SimulatorNew extends Application {
     private Label modeChoiceLbl, taskChoiceLbl, mapChoiceLbl, statusLbl, timerLbl, statusReceivedLbl;
     private Label timerTextLbl;
     private FileChooser fileChooser;
+    private ListView imgListView;
+    private ImageView imageView;
 //    private VBox timerVBox;
+
+    //image
+    private Image image;
 
     // Threads for each of the tasks
     private Thread fastTask, expTask, imageTask;
@@ -133,6 +148,9 @@ public class SimulatorNew extends Application {
 
     Exploration explore;
     ImageRecognition imageRecognition;
+
+    //listView data
+    ObservableList<String> olImgItems;
 
     public void start(Stage primaryStage) {
         // Init for Map and Robot
@@ -279,6 +297,7 @@ public class SimulatorNew extends Application {
         // Buttons Init
         connectBtn = new Button("Connect");
         startBtn = new Button("Start");
+        showImgBtn = new Button("Show Image");
 //        startExpBtn = new Button("Start");
 //        startFPBtn = new Button("Start");
         loadMapBtn = new Button("Load Map");
@@ -318,6 +337,9 @@ public class SimulatorNew extends Application {
         realRB.setToggleGroup(mode);
         simRB.setSelected(true);
 
+        //list view init
+        imgListView = new ListView();
+
         mode.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
@@ -337,6 +359,10 @@ public class SimulatorNew extends Application {
         expRB.setSelected(true);
         fastPathRB.setToggleGroup(task);
         imageRB.setToggleGroup(task);
+
+        //set buttons to not visible
+        resetMapBtn.setVisible(false);
+        showImgBtn.setVisible(false);
 
         task.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
@@ -428,9 +454,11 @@ public class SimulatorNew extends Application {
 
         connectBtn.setMaxWidth(MAX_WIDTH);
         startBtn.setMaxWidth(MAX_WIDTH);
+        showImgBtn.setMaxWidth(MAX_WIDTH);
         loadMapBtn.setMaxWidth(MAX_WIDTH);
         resetMapBtn.setMaxWidth(MAX_WIDTH);
 //        setObstacleBtn.setMaxWidth(MAX_WIDTH);
+
 
 
         //load default variables
@@ -454,6 +482,101 @@ public class SimulatorNew extends Application {
         // Button ActionListeners
         resetMapBtn.setOnMouseClicked(resetMapBtnClick);
         startBtn.setOnMouseClicked(startBtnClick);    // to be uncommented after the class is uncommented
+
+        class ListViewCell extends ListCell<String> {
+            @Override
+            public void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                final Label label = new Label();
+                if (item != null) {
+                    label.setText(item);
+                    setGraphic(label);
+                }
+            }
+        }
+
+        showImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                dialog = new Stage();
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                dialog.initOwner(primaryStage);
+
+                GridPane buttonGrid = new GridPane();
+                buttonGrid.setAlignment(Pos.CENTER);
+                buttonGrid.setHgap(5);
+                buttonGrid.setVgap(5);
+                GridPane listViewGrid = new GridPane();
+                listViewGrid.setAlignment(Pos.CENTER);
+
+                VBox vBox = new VBox();
+                vBox.setPrefWidth(100);
+
+                // Listview
+                imgListView = new ListView();
+
+                //img data
+                olImgItems = fileManager.getObserverList();
+
+                imgListView.setItems(olImgItems);
+
+                image = fileManager.generateImageFromPath(olImgItems.get(0));
+                imageView = new ImageView();
+
+                imageView.setX(50);
+                imageView.setY(25);
+                //setting the fit height and width of the image view
+                imageView.setFitHeight(550);
+                imageView.setFitWidth(400);
+                //Setting the preserve ratio of the image view
+                imageView.setPreserveRatio(true);
+
+                if(image != null)
+                    imageView.setImage(image);
+
+                //insert cancel btn
+                cancelBtn.setMinWidth(vBox.getPrefWidth());
+                vBox.getChildren().addAll(cancelBtn);
+                buttonGrid.add(cancelBtn, 3, 1);
+
+                ColumnConstraints col1 = new ColumnConstraints();
+                col1.setPercentWidth(0);
+                ColumnConstraints col2 = new ColumnConstraints();
+                col2.setPercentWidth(10);
+                buttonGrid.getColumnConstraints().setAll(col1, col2);
+
+                listViewGrid.add(imgListView, 0, 0);
+                listViewGrid.add(buttonGrid, 0, 1);
+                listViewGrid.add(imageView, 1, 0);
+                dialogScene = new Scene(listViewGrid, 800, 600);
+
+                //insert list view cell
+                imgListView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+                                    @Override
+                                    public ListCell<String> call(ListView<String> list) {
+                                        return new ListViewCell();
+                                    }
+                                });
+
+                imgListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                            public void changed(ObservableValue<? extends String> ov,
+                                                String old_val, String new_val) {
+                                System.out.println(new_val);
+                                image = fileManager.generateImageFromPath(new_val);
+                                imageView.setImage(image);
+
+                            }
+                        });
+
+                // Canvas MouseEvent
+                dialog.setScene(dialogScene);
+                dialog.show();
+
+                System.out.println("show img");
+
+            }
+        });
+
         setRobotBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
                 exploredMap.resetMap();
@@ -490,7 +613,6 @@ public class SimulatorNew extends Application {
                 newGridForMap.setHgap(5);
                 newGridForMap.setVgap(5);
                 newGridForMap.setPadding(new Insets(5, 5, 5, 5));
-
 
                 VBox vBox = new VBox();
                 vBox.setPrefWidth(100);
@@ -647,45 +769,49 @@ public class SimulatorNew extends Application {
         controlGrid.add(expRB, 1, 2);
         controlGrid.add(fastPathRB, 2, 2);
         controlGrid.add(imageRB, 3, 2);
-        controlGrid.add(startBtn, 4, 2);
 
-        controlGrid.add(arenaSetLbl, 0, 3, 5, 1);
+        //layer 3
+        controlGrid.add(startBtn, 1, 3);
+        controlGrid.add(resetMapBtn, 2, 3);
+        controlGrid.add(showImgBtn, 3, 3);
 
-        controlGrid.add(startPosLbl, 0, 4);
-        controlGrid.add(startPosTxt, 1, 4, 2, 1);
-        controlGrid.add(setRobotBtn, 3, 4, 2, 1);
+        controlGrid.add(arenaSetLbl, 0, 4, 5, 1);
 
-        controlGrid.add(startDirLbl, 0, 5);
-        controlGrid.add(upRB, 1, 5);
-        controlGrid.add(downRB, 2, 5);
-        controlGrid.add(leftRB, 3, 5);
-        controlGrid.add(rightRB, 4, 5);
+        controlGrid.add(startPosLbl, 0, 5);
+        controlGrid.add(startPosTxt, 1, 5, 2, 1);
+        controlGrid.add(setRobotBtn, 3, 5, 2, 1);
 
-        controlGrid.add(wayPointLbl, 0, 6);
-        controlGrid.add(wayPointTxt, 1, 6, 2, 1);
-        controlGrid.add(setWaypointBtn, 3, 6, 2, 1);
+        controlGrid.add(startDirLbl, 0, 6);
+        controlGrid.add(upRB, 1, 6);
+        controlGrid.add(downRB, 2, 6);
+        controlGrid.add(leftRB, 3, 6);
+        controlGrid.add(rightRB, 4, 6);
 
-        controlGrid.add(simSetLbl, 0, 7, 5, 1);
+        controlGrid.add(wayPointLbl, 0, 7);
+        controlGrid.add(wayPointTxt, 1, 7, 2, 1);
+        controlGrid.add(setWaypointBtn, 3, 7, 2, 1);
 
-        controlGrid.add(timeLimitLbl, 0, 8, 1, 1);
-        controlGrid.add(timeLimitSB, 1, 8, 3, 1);
-        controlGrid.add(timeLimitTxt, 4, 8, 1, 1);
+        controlGrid.add(simSetLbl, 0, 8, 5, 1);
 
-        controlGrid.add(coverageLimitLbl, 0, 9, 1, 1);
-        controlGrid.add(coverageLimitSB, 1, 9, 3, 1);
-        controlGrid.add(coverageLimitTxt, 4, 9, 1, 1);
+        controlGrid.add(timeLimitLbl, 0, 9, 1, 1);
+        controlGrid.add(timeLimitSB, 1, 9, 3, 1);
+        controlGrid.add(timeLimitTxt, 4, 9, 1, 1);
 
-        controlGrid.add(stepsLbl, 0, 10, 1, 1);
-        controlGrid.add(stepsSB, 1, 10, 3, 1);
-        controlGrid.add(stepsTxt, 4, 10, 1, 1);
+        controlGrid.add(coverageLimitLbl, 0, 10, 1, 1);
+        controlGrid.add(coverageLimitSB, 1, 10, 3, 1);
+        controlGrid.add(coverageLimitTxt, 4, 10, 1, 1);
 
-        controlGrid.add(mapChoiceLbl, 0, 11);
-        controlGrid.add(mapTxt, 1, 11);
-        controlGrid.add(loadMapBtn, 2, 11);
-        controlGrid.add(newMapBtn, 3, 11);
-        controlGrid.add(saveMapBtn, 4, 11);
+        controlGrid.add(stepsLbl, 0, 11, 1, 1);
+        controlGrid.add(stepsSB, 1, 11, 3, 1);
+        controlGrid.add(stepsTxt, 4, 11, 1, 1);
 
-        controlGrid.add(resetMapBtn, 0, 12, 5, 1);
+        controlGrid.add(mapChoiceLbl, 0, 12);
+        controlGrid.add(mapTxt, 1, 12);
+        controlGrid.add(loadMapBtn, 2, 12);
+        controlGrid.add(newMapBtn, 3, 12);
+        controlGrid.add(saveMapBtn, 4, 12);
+
+//        controlGrid.add(resetMapBtn, 0, 12, 5, 1);
 
 //        // Layer 2
 //        controlGrid.add(startBtn, 0, 11, 6, 1);
@@ -1141,6 +1267,7 @@ public class SimulatorNew extends Application {
             // a new task
             if (taskStarted == false && taskPaused == false) {
                 startBtn.setText("Pause");
+                resetMapBtn.setVisible(true);
                 displayTimer.stop();
                 displayTimer.initialize();
                 switch (taskSelected) {
@@ -1550,11 +1677,20 @@ public class SimulatorNew extends Application {
             int steps = (int) (stepsSB.getValue());
             ImageRecognition imageRecognition = new ImageRecognition(sim, exploredMap, map, robot, startPos, coverageLimit, timeLimit, steps, isDoingIsland);
             imageRecognition.startImageRecognition();
-
+            showImgBtn.setVisible(true);
             robot.setStatus("Done exploration\n");
+
+            //for testing
+            if(sim){
+
+                fileManager.jsonToImage("json msg");
+            }
 
             if (!sim) {
                 robot.send_android(exploredMap, robot.getAllImageList());
+
+                //get json from Rpi
+                fileManager.jsonToImage("json msg");
             }
             displayTimer.stop();
             // Prepare for fastest path and wait for command from arduino
@@ -1620,6 +1756,8 @@ public class SimulatorNew extends Application {
     // Event Handler for resetMapBtn
     private EventHandler<MouseEvent> resetMapBtnClick = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
+            resetMapBtn.setVisible(false);
+            showImgBtn.setVisible(false);
             internalHandleResetMap();
         }
     };

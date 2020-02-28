@@ -172,7 +172,6 @@ public class ImageRecognition {
 
             antiStuck();
             calibrate_every_x_steps();
-
             rightWallHug(true);
         }
         System.out.println(robot.getSurfTakenMap());
