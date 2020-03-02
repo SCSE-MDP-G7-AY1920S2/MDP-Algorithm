@@ -470,7 +470,7 @@ public class SimulatorNew extends Application {
         coverageLimitSB.setValue(coverageLimit);
 
         timeLimitTxt.setText("" + (int) timeLimit / 1000 + " s");
-        timeLimitSB.setValue(timeLimit);
+        timeLimitSB.setValue(timeLimit/1000);
 
         stepsTxt.setText("" + (int) steps + " steps per seconds");
         stepsSB.setValue(steps);
@@ -1364,7 +1364,7 @@ public class SimulatorNew extends Application {
         protected Integer call() throws Exception {
 //            Command c;
             double coverageLimit = (double) (coverageLimitSB.getValue());
-            int timeLimit = (int) (timeLimitSB.getValue());
+            int timeLimit = (int) (timeLimitSB.getValue() * 1000);
             int steps = (int) (stepsSB.getValue());
 
             if (!sim)
@@ -1678,7 +1678,7 @@ public class SimulatorNew extends Application {
         @Override
         protected Integer call() throws Exception {
             double coverageLimit = (double) (coverageLimitSB.getValue());
-            int timeLimit = (int) (timeLimitSB.getValue());
+            int timeLimit = (int) (timeLimitSB.getValue() * 1000);
             int steps = (int) (stepsSB.getValue());
             ImageRecognition imageRecognition = new ImageRecognition(sim, exploredMap, map, robot, startPos, coverageLimit, timeLimit, steps, isDoingIsland);
             imageRecognition.startImageRecognition();
