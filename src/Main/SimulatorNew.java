@@ -1381,13 +1381,12 @@ public class SimulatorNew extends Application {
             System.out.println(explore.getExploredPercentage());
             robot.setStatus("Done exploration\n");
 
-            MapDescriptor MDF = new MapDescriptor();
-            String objMDF = MDF.generateMDFString2(exploredMap);
-            String expMDF = MDF.generateMDFString1(exploredMap);
-            fileManager.saveMdf(expMDF, objMDF);
-
             if (!sim) {
                 robot.send_android(exploredMap, NetworkConstants.MDF);
+                MapDescriptor MDF = new MapDescriptor();
+                String objMDF = MDF.generateMDFString2(exploredMap);
+                String expMDF = MDF.generateMDFString1(exploredMap);
+                fileManager.saveMdf(expMDF, objMDF);
             }
             displayTimer.stop();
 
