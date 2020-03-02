@@ -520,7 +520,7 @@ public class SimulatorNew extends Application {
 
 //                imgListView.setItems(olImgItems);
 
-                image = fileManager.generateImageFromPath(FileManager.tiledImageFilename);
+                image = fileManager.generateImageFromPath(fileManager.getTiledImageFilename());
                 imageView = new ImageView();
 
                 imageView.setX(0);

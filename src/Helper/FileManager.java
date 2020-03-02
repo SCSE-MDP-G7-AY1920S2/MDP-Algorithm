@@ -52,8 +52,7 @@ public class FileManager {
 //                "\"id\": 10" +
 //            "}"+
             "]}";
-    public static final String tiledImageFilename = "tiled_image.jpg";
-
+    private static final String tiledImageFilename = "tiled_image.jpg";
     private String folderPath;
     private ObservableList observerList;
 
@@ -200,4 +199,9 @@ public class FileManager {
         ImageIO.write(result,"jpg",new File(resultPath));
         System.out.println(resultPath);
     }
+
+    public static String getTiledImageFilename() {
+        return tiledImageFilename;
+    }
+
 }
