@@ -520,7 +520,7 @@ public class SimulatorNew extends Application {
 
 //                imgListView.setItems(olImgItems);
 
-                image = fileManager.generateImageFromPath("tiledImage.jpg");
+                image = fileManager.generateImageFromPath(FileManager.tiledImageFilename);
                 imageView = new ImageView();
 
                 imageView.setX(0);
@@ -1683,7 +1683,7 @@ public class SimulatorNew extends Application {
             if(sim){
                 fileManager.jsonToImage("json msg");
                 // Generate tile image
-                fileManager.generateTileImage();;
+                fileManager.generateTileImage(1170, 480);;
             }
 
             if (!sim) {
