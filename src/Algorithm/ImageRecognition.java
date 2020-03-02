@@ -175,7 +175,6 @@ public class ImageRecognition {
             rightWallHug(true);
         }
 
-        System.out.println("this is it");
         System.out.println(robot.getSurfTakenMap());
         removeFakeVirtualWall();
 
