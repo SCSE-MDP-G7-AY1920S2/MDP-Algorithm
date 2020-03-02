@@ -448,6 +448,7 @@ public class Robot {
         sensorMap.put(LL1.getId(), LL1);
 
         if (dir != MapDirections.UP) {
+
             rotateSensors(dir);
         }
 
