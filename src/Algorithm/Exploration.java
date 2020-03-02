@@ -175,7 +175,7 @@ public class Exploration {
 
         exploredPercentage = currentMap.getPercentageExplored();
 
-        while ((System.currentTimeMillis() < stopTime) &&  backToStartTimes < 2) {
+        while ((System.currentTimeMillis() < stopTime) &&  backToStartTimes < 1) {
             exploredPercentage = currentMap.getPercentageExplored();
 
             antiStuck();
@@ -664,6 +664,7 @@ public class Exploration {
             robot.sense(currentMap, realMap);
             calibrate();
             movement.add(RoboCmd.RIGHT_TURN);
+
 
             moveForward();
         }

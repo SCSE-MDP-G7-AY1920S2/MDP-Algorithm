@@ -165,7 +165,7 @@ public class ImageRecognition {
         startTime = System.currentTimeMillis();
         stopTime = startTime + timeLimit;
 
-        exploredPercentage = currentMap.getPercentageExplored();
+        exploredPercentage = 0;//currentMap.getPercentageExplored();
 
         while ((System.currentTimeMillis() < stopTime + 60000) && !backToStart) {
             exploredPercentage = currentMap.getPercentageExplored();
@@ -174,6 +174,8 @@ public class ImageRecognition {
             calibrate_every_x_steps();
             rightWallHug(true);
         }
+
+        System.out.println("this is it");
         System.out.println(robot.getSurfTakenMap());
         removeFakeVirtualWall();
 

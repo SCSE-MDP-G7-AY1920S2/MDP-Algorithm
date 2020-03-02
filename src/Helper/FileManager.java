@@ -40,10 +40,14 @@ public class FileManager {
     }
 
     public void jsonToImage (String jsonStr) {
-
-        File f = this.generateNewFolder();
-        if(f==null)
-            return;
+        File f;
+        if(this.folderPath == "") {
+            f = this.generateNewFolder();
+            if (f == null)
+                return;
+        }
+        else
+            f = new File(this.folderPath);
 
         //temp holder
         jsonStr = this.jsonStr;
@@ -80,6 +84,26 @@ public class FileManager {
 
         }
 
+    }
+
+    public void saveMdf(String mapMdf, String exploredMdf){
+
+        if(this.folderPath == "")
+            this.generateNewFolder();
+
+        // tokenize the data
+        if (mapMdf != null && exploredMdf != null && this.folderPath != "") {
+
+            try (PrintWriter out = new PrintWriter( this.folderPath + File.separator +"savedMdf.txt")) {
+                out.println(mapMdf + "\n" + exploredMdf);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+        else
+            return;
     }
 
     private File generateNewFolder(){
