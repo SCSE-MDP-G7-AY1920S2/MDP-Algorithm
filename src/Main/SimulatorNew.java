@@ -15,7 +15,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -56,10 +55,10 @@ import javafx.scene.shape.Rectangle;
 import static java.lang.Math.abs;
 
 import Helper.*;
-import javafx.util.Callback;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+//import javafx.util.Callback;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+//import org.json.JSONTokener;
 
 //JavaFX Libraries
 
@@ -79,7 +78,7 @@ public class SimulatorNew extends Application {
     private boolean isDoingIsland = true;
 
     private boolean expMapDraw = true;
-    private boolean newExpMapDraw = true;
+//    private boolean newExpMapDraw = true;
     private AnimationTimer animateTimer1;
     private AnimationTimer animateTimer2;
     public static DisplayTimer displayTimer = new DisplayTimer();
@@ -104,8 +103,8 @@ public class SimulatorNew extends Application {
     private final int MAX_WIDTH = 1000;
 
     //status received
-    private String cmdStatus;
-    private NetworkManager statusMgr;
+//    private String cmdStatus;
+//    private NetworkManager statusMgr;
 
     // initial task set to exploration
     private String taskSelected = EXPLORATION;
@@ -121,7 +120,7 @@ public class SimulatorNew extends Application {
 
     // UI components
     private Button loadMapBtn, newMapBtn, saveMapBtn, resetMapBtn, startBtn, showImgBtn, connectBtn, setWaypointBtn, setRobotBtn,
-            setObstacleBtn, cancelBtn, confirmBtn;
+            cancelBtn, confirmBtn; //,setObstacleBtn;
     private RadioButton expRB, fastPathRB, imageRB, simRB, realRB, upRB, downRB, leftRB, rightRB, doingIsland, notDoingIsland;
     private ToggleGroup mode, task, startDir, islandMode;
     private TextArea debugOutput;
@@ -146,8 +145,6 @@ public class SimulatorNew extends Application {
     Exploration explore;
     ImageRecognition imageRecognition;
 
-    //listView data
-    ObservableList<String> olImgItems;
 
     public void start(Stage primaryStage) {
         // Init for Map and Robot
@@ -187,17 +184,17 @@ public class SimulatorNew extends Application {
 
         animateTimer1 = new AnimationTimer() {
 
-            private long startTime;
+//            private long startTime;
 
             @Override
             public void start() {
-                startTime = System.currentTimeMillis();
+//                startTime = System.currentTimeMillis();
                 super.start();
             }
 
             @Override
             public void handle(long timestamp) {
-                long now = System.currentTimeMillis();
+//                long now = System.currentTimeMillis();
                 drawMap(expMapDraw);
                 drawRobot();
                 debugOutput.setText(robot.getStatus() + "\n" + robot.toString());
@@ -216,17 +213,17 @@ public class SimulatorNew extends Application {
         };
         animateTimer2 = new AnimationTimer() {
 
-            private long startTime;
+//            private long startTime;
 
             @Override
             public void start() {
-                startTime = System.currentTimeMillis();
+//                startTime = System.currentTimeMillis();
                 super.start();
             }
 
             @Override
             public void handle(long timestamp) {
-                long now = System.currentTimeMillis();
+//                long now = System.currentTimeMillis();
                 drawNewMap(false);
             }
         };
@@ -305,7 +302,7 @@ public class SimulatorNew extends Application {
         setWaypointBtn.setMaxWidth(MAX_WIDTH);
         setRobotBtn = new Button("Reset Starting Position");
         setRobotBtn.setMaxWidth(MAX_WIDTH);
-        setObstacleBtn = new Button("Set Obstacles");
+//        setObstacleBtn = new Button("Set Obstacles");
         cancelBtn = new Button("Cancel");
         cancelBtn.setMaxWidth(MAX_WIDTH);
         confirmBtn = new Button("Confirm");
@@ -334,17 +331,14 @@ public class SimulatorNew extends Application {
         realRB.setToggleGroup(mode);
         simRB.setSelected(true);
 
-        mode.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (simRB.isSelected()) {
-                    sim = true;
-                } else {
-                    System.out.println("Actual run selected, connecting to RPI");
-                    netMgr.initConn();
-                    sim = false;
-                    stepsSB.setValue(30);   // set to max to avoid any delay
-                }
+        mode.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (simRB.isSelected()) {
+                sim = true;
+            } else {
+                System.out.println("Actual run selected, connecting to RPI");
+                netMgr.initConn();
+                sim = false;
+                stepsSB.setValue(30);   // set to max to avoid any delay
             }
         });
 
@@ -358,25 +352,22 @@ public class SimulatorNew extends Application {
         resetMapBtn.setVisible(false);
         showImgBtn.setVisible(false);
 
-        task.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (simRB.isSelected() && fastPathRB.isSelected()) {
-                    internalHandleResetMap();
-                }
-                if (simRB.isSelected() && expRB.isSelected()) {
-                    internalHandleResetMap();
-                }
-                if (simRB.isSelected() && imageRB.isSelected()) {
-                    internalHandleResetMap();
-                }
-                if (expRB.isSelected()) {
-                    taskSelected = EXPLORATION;
-                } else if (fastPathRB.isSelected()) {
-                    taskSelected = FASTEST_PATH;
-                } else if (imageRB.isSelected()) {
-                    taskSelected = IMAGE;
-                }
+        task.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (simRB.isSelected() && fastPathRB.isSelected()) {
+                internalHandleResetMap();
+            }
+            if (simRB.isSelected() && expRB.isSelected()) {
+                internalHandleResetMap();
+            }
+            if (simRB.isSelected() && imageRB.isSelected()) {
+                internalHandleResetMap();
+            }
+            if (expRB.isSelected()) {
+                taskSelected = EXPLORATION;
+            } else if (fastPathRB.isSelected()) {
+                taskSelected = FASTEST_PATH;
+            } else if (imageRB.isSelected()) {
+                taskSelected = IMAGE;
             }
         });
 
@@ -385,14 +376,11 @@ public class SimulatorNew extends Application {
         notDoingIsland.setToggleGroup(islandMode);
         doingIsland.setSelected(true);
 
-        islandMode.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if (doingIsland.isSelected()) {
-                    isDoingIsland = true;
-                } else {
-                    isDoingIsland = false;
-                }
+        islandMode.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (doingIsland.isSelected()) {
+                isDoingIsland = true;
+            } else {
+                isDoingIsland = false;
             }
         });
 
@@ -403,25 +391,22 @@ public class SimulatorNew extends Application {
         leftRB.setToggleGroup(startDir);
         rightRB.setToggleGroup(startDir);
         rightRB.setSelected(true);
-        startDir.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                RadioButton button = (RadioButton) startDir.getSelectedToggle();
-                MapDirections newDir = MapDirections.valueOf(button.getText());
-                try {
-                    if (MapDirections.getAntiClockwise(robot.getDir()) == newDir) {
-                        robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                    } else if (MapDirections.getClockwise(robot.getDir()) == newDir) {
-                        robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
-                    } else {
-                        robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                        robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                    }
-                    System.out.println("Setting robot to new direction: " + newDir.toString() + "\n");
-                } catch (InterruptedException e) {
-                    LOGGER.warning("InterruptException");
-                    e.printStackTrace();
+        startDir.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            RadioButton button = (RadioButton) startDir.getSelectedToggle();
+            MapDirections newDir = MapDirections.valueOf(button.getText());
+            try {
+                if (MapDirections.getAntiClockwise(robot.getDir()) == newDir) {
+                    robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+                } else if (MapDirections.getClockwise(robot.getDir()) == newDir) {
+                    robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
+                } else {
+                    robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+                    robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 }
+                System.out.println("Setting robot to new direction: " + newDir.toString() + "\n");
+            } catch (InterruptedException e) {
+                LOGGER.warning("InterruptException");
+                e.printStackTrace();
             }
         });
 
@@ -457,16 +442,16 @@ public class SimulatorNew extends Application {
 
         //load default variables
         double coverageLimit = 100;
-        int timeLimit = (int) 240000;
-        int steps = (int) 5;
+        int timeLimit = 240000;
+        int steps = 5;
 
-        coverageLimitTxt.setText("" + (int) coverageLimit + " %");
+        coverageLimitTxt.setText( (int) coverageLimit + " %");
         coverageLimitSB.setValue(coverageLimit);
 
-        timeLimitTxt.setText("" + (int) timeLimit / 1000 + " s");
-        timeLimitSB.setValue(timeLimit/1000);
+        timeLimitTxt.setText( timeLimit / 1000 + " s");
+        timeLimitSB.setValue((double)(timeLimit/1000));
 
-        stepsTxt.setText("" + (int) steps + " steps per seconds");
+        stepsTxt.setText("" +steps + " steps per seconds");
         stepsSB.setValue(steps);
 
         // load default map from defaultMapPath
@@ -477,161 +462,148 @@ public class SimulatorNew extends Application {
         resetMapBtn.setOnMouseClicked(resetMapBtnClick);
         startBtn.setOnMouseClicked(startBtnClick);    // to be uncommented after the class is uncommented
 
-        showImgBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                dialog = new Stage();
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(primaryStage);
+        showImgBtn.setOnMouseClicked(mouseEvent -> {
+            dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(primaryStage);
 
-                GridPane buttonGrid = new GridPane();
-                buttonGrid.setAlignment(Pos.CENTER);
-                buttonGrid.setHgap(5);
-                buttonGrid.setVgap(5);
-                buttonGrid.setPadding(new Insets(10, 10, 10, 10));
-                GridPane tiltImgGrid = new GridPane();
-                tiltImgGrid.setAlignment(Pos.CENTER);
+            GridPane buttonGrid = new GridPane();
+            buttonGrid.setAlignment(Pos.CENTER);
+            buttonGrid.setHgap(5);
+            buttonGrid.setVgap(5);
+            buttonGrid.setPadding(new Insets(10, 10, 10, 10));
+            GridPane tiltImgGrid = new GridPane();
+            tiltImgGrid.setAlignment(Pos.CENTER);
 
-                VBox vBox = new VBox();
-                vBox.setPrefWidth(100);
+            VBox vBox = new VBox();
+            vBox.setPrefWidth(100);
 
-                image = fileManager.generateImageFromPath(fileManager.getTiledImageFilename());
-                imageView = new ImageView();
+            image = fileManager.generateImageFromPath(fileManager.getTiledImageFilename());
+            imageView = new ImageView();
 
-                imageView.setX(0);
-                imageView.setY(0);
-                //setting the fit height and width of the image view
-                imageView.setFitHeight(750);
-                imageView.setFitWidth(1440);
-                //Setting the preserve ratio of the image view
-                imageView.setPreserveRatio(true);
+            imageView.setX(0);
+            imageView.setY(0);
+            //setting the fit height and width of the image view
+            imageView.setFitHeight(750);
+            imageView.setFitWidth(1440);
+            //Setting the preserve ratio of the image view
+            imageView.setPreserveRatio(true);
 
-                if(image != null)
-                    imageView.setImage(image);
+            if(image != null)
+                imageView.setImage(image);
 
-                //insert cancel btn
-                cancelBtn.setMinWidth(vBox.getPrefWidth());
-                vBox.getChildren().addAll(cancelBtn);
-                buttonGrid.add(cancelBtn, 0, 0);
+            //insert cancel btn
+            cancelBtn.setMinWidth(vBox.getPrefWidth());
+            vBox.getChildren().addAll(cancelBtn);
+            buttonGrid.add(cancelBtn, 0, 0);
 
-                tiltImgGrid.add(imageView, 0, 0);
-                tiltImgGrid.add(buttonGrid, 0, 1);
-                dialogScene = new Scene(tiltImgGrid, 1440, 800);
+            tiltImgGrid.add(imageView, 0, 0);
+            tiltImgGrid.add(buttonGrid, 0, 1);
+            dialogScene = new Scene(tiltImgGrid, 1440, 800);
 
-                // Canvas MouseEvent
-                dialog.setScene(dialogScene);
-                dialog.show();
+            // Canvas MouseEvent
+            dialog.setScene(dialogScene);
+            dialog.show();
 
-                System.out.println("show img");
+            System.out.println("show img");
 
-            }
         });
 
-        setRobotBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                exploredMap.resetMap();
-                mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
-                setRobot = !setRobot;
-                if (!setRobot)
-                    setRobotBtn.setText("Reset Starting Position");
-                else
-                    setRobotBtn.setText("Confirm Starting Position");
+        setRobotBtn.setOnMouseClicked(e -> {
+            exploredMap.resetMap();
+            mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
+            setRobot = !setRobot;
+            if (!setRobot)
+                setRobotBtn.setText("Reset Starting Position");
+            else
+                setRobotBtn.setText("Confirm Starting Position");
 
-                setWaypoint = false;
+            setWaypoint = false;
 //                setObstacle = false;
-            }
         });
-        newMapBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                newExploredMap.resetMap();
-                dialog = new Stage();
-                dialog.initModality(Modality.APPLICATION_MODAL);
-                dialog.initOwner(primaryStage);
 
-                newMapGrid = new Canvas(MapConstants.MAP_CELL_SIZE * MapConstants.MAP_WIDTH + 1 + MapConstants.MAP_OFFSET,
-                        MapConstants.MAP_CELL_SIZE * MapConstants.MAP_LENGTH + 1 + MapConstants.MAP_OFFSET);
-                newGC = newMapGrid.getGraphicsContext2D();
+        newMapBtn.setOnMouseClicked(e -> {
+            newExploredMap.resetMap();
+            dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(primaryStage);
 
-                // Grid Settings for new map
-                GridPane newGridForMap = new GridPane();
-                GridPane buttonGrid = new GridPane();
-                buttonGrid.setAlignment(Pos.CENTER);
-                buttonGrid.setHgap(5);
-                buttonGrid.setVgap(5);
-                newGridForMap.setAlignment(Pos.CENTER);
-                newGridForMap.setHgap(5);
-                newGridForMap.setVgap(5);
-                newGridForMap.setPadding(new Insets(5, 5, 5, 5));
+            newMapGrid = new Canvas(MapConstants.MAP_CELL_SIZE * MapConstants.MAP_WIDTH + 1 + MapConstants.MAP_OFFSET,
+                    MapConstants.MAP_CELL_SIZE * MapConstants.MAP_LENGTH + 1 + MapConstants.MAP_OFFSET);
+            newGC = newMapGrid.getGraphicsContext2D();
 
-                VBox vBox = new VBox();
-                vBox.setPrefWidth(100);
+            // Grid Settings for new map
+            GridPane newGridForMap = new GridPane();
+            GridPane buttonGrid = new GridPane();
+            buttonGrid.setAlignment(Pos.CENTER);
+            buttonGrid.setHgap(5);
+            buttonGrid.setVgap(5);
+            newGridForMap.setAlignment(Pos.CENTER);
+            newGridForMap.setHgap(5);
+            newGridForMap.setVgap(5);
+            newGridForMap.setPadding(new Insets(5, 5, 5, 5));
 
-                cancelBtn.setMinWidth(vBox.getPrefWidth());
-                confirmBtn.setMinWidth(vBox.getPrefWidth());
+            VBox vBox = new VBox();
+            vBox.setPrefWidth(100);
 
-                vBox.getChildren().addAll(cancelBtn, confirmBtn);
+            cancelBtn.setMinWidth(vBox.getPrefWidth());
+            confirmBtn.setMinWidth(vBox.getPrefWidth());
 
-                buttonGrid.add(cancelBtn, 3, 1);
-                buttonGrid.add(confirmBtn, 4, 1);
+            vBox.getChildren().addAll(cancelBtn, confirmBtn);
 
-                ColumnConstraints col1 = new ColumnConstraints();
-                col1.setPercentWidth(0);
-                ColumnConstraints col2 = new ColumnConstraints();
-                col2.setPercentWidth(10);
-                buttonGrid.getColumnConstraints().setAll(col1, col2);
+            buttonGrid.add(cancelBtn, 3, 1);
+            buttonGrid.add(confirmBtn, 4, 1);
 
-                newGridForMap.add(newMapGrid, 0, 0);
-                newGridForMap.add(buttonGrid, 0, 1);
-                dialogScene = new Scene(newGridForMap, 600, 600);
+            ColumnConstraints col1 = new ColumnConstraints();
+            col1.setPercentWidth(0);
+            ColumnConstraints col2 = new ColumnConstraints();
+            col2.setPercentWidth(10);
+            buttonGrid.getColumnConstraints().setAll(col1, col2);
+
+            newGridForMap.add(newMapGrid, 0, 0);
+            newGridForMap.add(buttonGrid, 0, 1);
+            dialogScene = new Scene(newGridForMap, 600, 600);
 
 
-                setRobot = false;
-                setWaypoint = false;
-                Boolean alreadyExplored = false;
+            setRobot = false;
+            setWaypoint = false;
+//                Boolean alreadyExplored = false;
 
-                animateTimer1.stop();
-                animateTimer2.start();
+            animateTimer1.stop();
+            animateTimer2.start();
 
-                // Canvas MouseEvent
-                newMapGrid.setOnMouseClicked(NewMapClick);
-                newMapGrid.setUserData("New_Map");
-                dialog.setScene(dialogScene);
-                dialog.show();
-            }
+            // Canvas MouseEvent
+            newMapGrid.setOnMouseClicked(NewMapClick);
+            newMapGrid.setUserData("New_Map");
+            dialog.setScene(dialogScene);
+            dialog.show();
         });
-        setWaypointBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                exploredMap.resetMap();
-                mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
-                setWaypoint = !setWaypoint;
-                if (setWaypoint)
-                    setWaypointBtn.setText("Confirm Waypoint");
-                else
-                    setWaypointBtn.setText("Reset Waypoint");
+        setWaypointBtn.setOnMouseClicked(e -> {
+            exploredMap.resetMap();
+            mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
+            setWaypoint = !setWaypoint;
+            if (setWaypoint)
+                setWaypointBtn.setText("Confirm Waypoint");
+            else
+                setWaypointBtn.setText("Reset Waypoint");
 //                setObstacle = false;
-                setRobot = false;
-            }
+            setRobot = false;
         });
-        cancelBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                dialog.close();
-                animateTimer2.stop();
-                animateTimer1.start();
-            }
+        cancelBtn.setOnMouseClicked(e -> {
+            dialog.close();
+            animateTimer2.stop();
+            animateTimer1.start();
         });
-        confirmBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                newExploredMap.setAllExplored(true);
-                mapDescriptor.saveRealMap(newExploredMap, defaultMapPath);
-                map.resetMap();
-                exploredMap.resetMap();
-                mapDescriptor.loadRealMap(map, defaultMapPath);
-                mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
-                dialog.close();
-                animateTimer2.stop();
-                animateTimer1.start();
-            }
+        confirmBtn.setOnMouseClicked(e -> {
+            newExploredMap.setAllExplored(true);
+            mapDescriptor.saveRealMap(newExploredMap, defaultMapPath);
+            map.resetMap();
+            exploredMap.resetMap();
+            mapDescriptor.loadRealMap(map, defaultMapPath);
+            mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
+            dialog.close();
+            animateTimer2.stop();
+            animateTimer1.start();
         });
 //        setObstacleBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            public void handle(MouseEvent e) {
@@ -650,28 +622,24 @@ public class SimulatorNew extends Application {
 //                expMapDraw = !setObstacle;
 //            }
 //        });
-        loadMapBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                fileChooser.setTitle("Choose file to load Map from");
-                File file = fileChooser.showOpenDialog(primaryStage);
-                if (file != null) {
-                    map.resetMap();
-                    exploredMap.resetMap();
-                    mapDescriptor.loadRealMap(map, file.getAbsolutePath());
-                    mapTxt.setText(file.getName());
-                    mapDescriptor.saveRealMap(map, defaultMapPath);
-                    mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
-                }
-                expMapDraw = true;
+        loadMapBtn.setOnMouseClicked(e -> {
+            fileChooser.setTitle("Choose file to load Map from");
+            File file = fileChooser.showOpenDialog(primaryStage);
+            if (file != null) {
+                map.resetMap();
+                exploredMap.resetMap();
+                mapDescriptor.loadRealMap(map, file.getAbsolutePath());
+                mapTxt.setText(file.getName());
+                mapDescriptor.saveRealMap(map, defaultMapPath);
+                mapDescriptor.loadRealMap(exploredMap, defaultMapPath);
             }
+            expMapDraw = true;
         });
-        saveMapBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                fileChooser.setTitle("Choose file to save Map to");
-                File file = fileChooser.showOpenDialog(primaryStage);
-                if (file != null) {
-                    mapDescriptor.saveRealMap(map, file.getAbsolutePath());
-                }
+        saveMapBtn.setOnMouseClicked(e -> {
+            fileChooser.setTitle("Choose file to save Map to");
+            File file = fileChooser.showOpenDialog(primaryStage);
+            if (file != null) {
+                mapDescriptor.saveRealMap(map, file.getAbsolutePath());
             }
         });
 
@@ -810,59 +778,56 @@ public class SimulatorNew extends Application {
         // Dimensions of the Window
         Scene scene = new Scene(grid, 1000, 600);
         primaryStage.setScene(scene);
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                sim = false;
-                robot.setSimulation(sim);
-                System.out.println("System movement");
+        //key handling
+        scene.setOnKeyPressed(e -> {
+            System.out.println("key pressed");
+//                sim = false;
+//                robot.setSimulation(sim);
+            System.out.println("System movement");
 
-                try {
-                    switch (e.getCode()) {
-                        case W:
-                            robot.move(RoboCmd.FORWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                            robot.sense(exploredMap, map);
-                            break;
-                        case S:
-                            robot.move(RoboCmd.BACKWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                            robot.sense(exploredMap, map);
-                            break;
-                        case A:
-                            robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                            robot.sense(exploredMap, map);
-                            break;
-                        case D:
-                            robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
-                            robot.sense(exploredMap, map);
-                            break;
-                        case I:
+            try {
+                switch (e.getCode()) {
+                    case W:
+                        robot.move(RoboCmd.FORWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map);
+                        break;
+                    case S:
+                        robot.move(RoboCmd.BACKWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map);
+                        break;
+                    case A:
+                        robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map);
+                        break;
+                    case D:
+                        robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map);
+                        break;
+                    case I:
 //                            NetMgr.getInstance().send("I");
 //                            String msg;
 //                            do {
 //                                msg = NetMgr.getInstance().receive();
 //                            } while(msg.charAt(0) == 'F');
 //                            System.out.println(msg);
-                            String to_send = String.format("I%d|%d|%s", 6, 3, MapDirections.getClockwise(MapDirections.UP).toString());
-                            netMgr.send(to_send, NetworkConstants.EXPLORATION);
-                            break;
-                        default:
-                            break;
-                    }
-                    System.out.println("Robot Direction AFTER:" + robot.getDir());
-                } catch (InterruptedException ex) {
-                    LOGGER.warning("Interrupt Exception");
-                    ex.printStackTrace();
+                        String to_send = String.format("I%d|%d|%s", 6, 3, MapDirections.getClockwise(MapDirections.UP).toString());
+                        netMgr.send(to_send, NetworkConstants.EXPLORATION);
+                        break;
+                    default:
+                        break;
                 }
+                System.out.println("Robot Direction AFTER:" + robot.getDir());
+            } catch (InterruptedException ex) {
+                LOGGER.warning("Interrupt Exception");
+                ex.printStackTrace();
             }
         });
 
         primaryStage.show();
 
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent t) {
-                Platform.exit();
-                System.exit(0);
-            }
+        primaryStage.setOnCloseRequest(t -> {
+            Platform.exit();
+            System.exit(0);
         });
 
     } // end of start
@@ -1001,7 +966,7 @@ public class SimulatorNew extends Application {
 //
 //        try{
 //            // This block configure the logger with handler and formatterR
-//            fh = new FileHandler("C:/Users/jorda/Documents/GitHub/MDP-Algorithm/logs/log_test.log");
+//            fh = new FileHandler("C:/Users/jordan/Documents/GitHub/MDP-Algorithm/logs/log_test.log");
 //            LOGGER.addHandler(fh);
 //            SimpleFormatter formatter = new SimpleFormatter();
 //            fh.setFormatter(formatter);
@@ -1020,7 +985,7 @@ public class SimulatorNew extends Application {
 
             double mouseX = event.getX();
             double mouseY = event.getY();
-            Boolean isMainMap = false;
+//            Boolean isMainMap = false;
 
             int selectedCol = (int) ((mouseX - MapConstants.MAP_OFFSET / 2) / MapConstants.MAP_CELL_SIZE);
             int selectedRow = (int) (MapConstants.MAP_LENGTH
@@ -1681,11 +1646,9 @@ public class SimulatorNew extends Application {
 //        robot.setSimulation(true);
 
         MapDirections dir = robot.getDir();
-        String msg;
         robot.setSimulation(true);
         switch(dir){
             case UP:
-
                 break;
             case DOWN:
                 robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
@@ -1701,7 +1664,6 @@ public class SimulatorNew extends Application {
                 break;
         }
         robot.setSimulation(false);
-
         exploredMap.removeAllPaths();
 
         fastTask = new Thread(new FastTask());
@@ -1733,7 +1695,6 @@ public class SimulatorNew extends Application {
     }
 
     private void internalHandleResetMap() {
-        System.out.println("here "+sim);
         if (!sim)
             netMgr.send("RST", "EX");
         // stop existing task and set startedTask to null if any

@@ -26,7 +26,7 @@ public class FastestPath {
     private HashMap<Point, Double> costGMap;
     private HashMap<Point, Double> costMap = new HashMap<Point, Double>();
 
-    private static final NetworkManager netMgr = NetworkManager.getInstance();
+//    private static final NetworkManager netMgr = NetworkManager.getInstance();
 
     public FastestPath(Map exploredMap, Robot robot, boolean simulation) {
         this.exploredMap = exploredMap;
@@ -41,7 +41,7 @@ public class FastestPath {
         for (int row = 0; row < MapConstants.MAP_LENGTH; row ++) {
             for (int col = 0; col < MapConstants.MAP_WIDTH; col ++) {
                 MapGrid grid = exploredMap.getGrid(row, col);
-
+                //differentiate between obs and path
                 if (grid.movableGrid()) {
                     costGMap.put(grid.getPos(), 0.0);
                 }
@@ -67,9 +67,10 @@ public class FastestPath {
 
         grid = exploredMap.getGrid(goal.y, goal.x);
         costMap.put(grid.getPos(), 0.0);
-
-        gridList.add(exploredMap.getGrid(goal.y, goal.x));
-        tmpList.add(exploredMap.getGrid(goal.y, goal.x));
+        gridList.add(grid);
+        tmpList.add(grid);
+//        gridList.add(exploredMap.getGrid(goal.y, goal.x));
+//        tmpList.add(exploredMap.getGrid(goal.y, goal.x));
         System.out.println("start");
 
         while(!tmpList.isEmpty()){

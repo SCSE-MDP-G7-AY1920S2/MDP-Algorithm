@@ -5,13 +5,13 @@ import javafx.scene.paint.Color;
 public class RobotConstants {
 
     public static final double INFINITE_COST = 10000000;
-    public static final int CHECKSTEPS = 18;    // 4
+//    public static final int CHECKSTEPS = 18;    // 4
 
     // targeted coverage
-    public static final int TARGETED_COVERAGE = 97;
+//    public static final int TARGETED_COVERAGE = 97;
 
     // best exploration timing for leaderboard in seconds
-    public static final int BEST_EXP_TIMING = 1;
+//    public static final int BEST_EXP_TIMING = 1;
 
     // To be adjusted
     public static final int MOVE_STEPS = 1;

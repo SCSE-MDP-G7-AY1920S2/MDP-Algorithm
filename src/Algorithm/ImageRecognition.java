@@ -316,7 +316,7 @@ public class ImageRecognition {
     }
 
     public void rightWallHug(boolean addToSurfaceTaken) throws InterruptedException{
-        String msg;
+//        String msg;
 
         if (movable(MapDirections.getClockwise(robot.getDir())))
         {
@@ -376,7 +376,7 @@ public class ImageRecognition {
     }
 
     public void moveForward(boolean takingImage) throws InterruptedException {
-        String msg;
+//        String msg;
         if (movable(robot.getDir())) {
             robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
             robot.sense(currentMap, realMap);
