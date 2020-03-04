@@ -1428,11 +1428,11 @@ public class SimulatorNew extends Application {
 
             System.out.println(cmd);
             String strArr[] = cmd.split(",");
-            String cmdPart2 = strArr[strArr.length-1] + "," + strArr[strArr.length-2];
+            String cmdPart2 = strArr[strArr.length-2] + "," + strArr[strArr.length-1];
 
             String cmdPart1 = strArr[0];
-            for (int i = 0; i < strArr.length - 2; i++) {
-                cmdPart1 += strArr[i];
+            for (int i = 1; i < strArr.length - 2; i++) {
+                cmdPart1 = cmdPart1 + "," + strArr[i];
             }
 
             System.out.println(cmdPart1);
@@ -1440,7 +1440,7 @@ public class SimulatorNew extends Application {
 
 
             if(!sim){
-                netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
+                //netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
                 netMgr.send(cmdPart1, NetworkConstants.FASTEST_PATH);
                 netMgr.send(cmdPart2, NetworkConstants.FASTEST_PATH);
             }
