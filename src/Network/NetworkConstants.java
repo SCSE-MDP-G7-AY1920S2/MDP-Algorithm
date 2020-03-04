@@ -20,6 +20,8 @@ public class NetworkConstants {
     public static final String CALI_FIN = "Finish Calibrate";
     public static final String CALI_FP = "calibrated for FP";
 
+    public static final String IMAGE_KEY = "imgRaw";
+
     public static final String START_POINT_KEY = "startingPoint";
     public static final String WAY_POINT_KEY = "wayPoint";
 

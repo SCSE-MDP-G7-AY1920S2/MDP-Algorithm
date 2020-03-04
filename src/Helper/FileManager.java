@@ -1,4 +1,5 @@
 package Helper;
+import Network.NetworkConstants;
 import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,7 +27,7 @@ public class FileManager {
         this.folderPath = "";
     }
 
-    public void jsonToImage (String jsonStr) {
+    public void jsonToImage (String msg) {
 
         File f;
         if(this.folderPath == "") {
@@ -37,36 +38,41 @@ public class FileManager {
         else
             f = new File(this.folderPath);
 
+        if(msg.contains(NetworkConstants.IMAGE_KEY)){
+//            JSONArray arr = new JSONArray(msg);
+            JSONObject imgRawJson = new JSONObject(new JSONTokener(msg));
+            JSONArray arr = imgRawJson.getJSONArray(NetworkConstants.IMAGE_KEY);
 
-        JSONArray arr = new JSONArray(jsonStr);
-//        JSONArray arr = msg.getJSONArray("imgRaw");
+            if(arr.isEmpty())
+                return;
 
-        if(arr.isEmpty())
-            return;
+            for(int i=0; i<arr.length(); i++){
+                int id = i;
+                String image = arr.get(i).toString();
 
-        for(int i=0; i<arr.length(); i++){
-            int id = i;
-            String image = arr.get(i).toString();
+                try {
+                    LOGGER.info("Saving image...");
+                    String tmp = image.split("'")[1];
+                    byte[] decodedString = Base64.getDecoder().decode(tmp.getBytes(StandardCharsets.UTF_8));
+                    File image_f = new File(f, id+".jpg");
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(image_f));
+                    bos.write(decodedString);
+                    bos.flush();
+                    bos.close();
 
-            try {
-                LOGGER.info("Saving image: " + jsonStr);
-                String tmp = image.split("'")[1];
-                byte[] decodedString = Base64.getDecoder().decode(tmp.getBytes(StandardCharsets.UTF_8));
-                File image_f = new File(f, id+".jpg");
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(image_f));
-                bos.write(decodedString);
-                bos.flush();
-                bos.close();
-
-            } catch (UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+
+
 
 
 

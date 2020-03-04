@@ -453,6 +453,7 @@ public class ImageRecognition {
                 }
             } else {
                 break;
+
             }
         }
 

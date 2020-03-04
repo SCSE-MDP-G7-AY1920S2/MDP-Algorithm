@@ -1605,7 +1605,7 @@ public class SimulatorNew extends Application {
             if (!sim) {
                 robot.send_android(exploredMap, robot.getAllImageList());
                 //get json from Rpi
-                fileManager.jsonToImage("json msg");
+//                fileManager.jsonToImage("json msg");
             }
 
             if(!sim){
