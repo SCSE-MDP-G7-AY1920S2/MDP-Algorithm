@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 public class ImageRecognition {
 
     private static final Logger LOGGER = Logger.getLogger(ImageRecognition.class.getName());
+    private static int imagesTakenCounter = 0;
 
     private boolean simulation;
     private int stepsPerSecond = 30;
@@ -410,6 +411,7 @@ public class ImageRecognition {
         int camera_col = robot.getRightCam().getPos().x;
 
         boolean hasObstacleAtCamDir = false;
+        boolean takeImageFlag = false;
 
         int rowInc = 0, colInc = 0;
         int temp_row, temp_col;
@@ -465,30 +467,80 @@ public class ImageRecognition {
             // R1
             tempObstacleSurface = robot.addToSurfaceTaken("R1", rowInc, colInc);
             if (tempObstacleSurface != null) {
+                System.out.println("Object detected by R1");
                 curSurfaceList.add(tempObstacleSurface);
             }
             // R2
             tempObstacleSurface = robot.addToSurfaceTaken("R2", rowInc, colInc);
             if (tempObstacleSurface != null) {
+                System.out.println("Object detected by R2");
                 curSurfaceList.add(tempObstacleSurface);
             }
             // camera
             if (hasObstacleAtCamDir) {
                 tempObstacleSurface = robot.internalAddToSurfaceTaken(camera_row, camera_col, rowInc, colInc, camRange);
                 if (tempObstacleSurface != null) {
+                    System.out.println("Object detected by CAM");
                     curSurfaceList.add(tempObstacleSurface);
                 }
             }
 
-            if (!simulation && curSurfaceList.size() > 0) {
-                saveImage();
+            // Check if surface already taken
+//            if (!simulation && (curSurfaceList.size() > 0)){
+            if ((curSurfaceList.size() > 0)){
+                for (int i = 0; i < curSurfaceList.size(); i++) {
+                    System.out.println(curSurfaceList.get(i).getPos().x + " " + curSurfaceList.get(i).getPos().y + " " + curSurfaceList.get(i).getSurface());
+                    MapGrid temp_cell = currentMap.getGrid(curSurfaceList.get(i).getPos().y, curSurfaceList.get(i).getPos().x);
+                    if (!isSurfaceTaken(temp_cell, curSurfaceList.get(i).getSurface())){
+                        takeImageFlag = true;
+                        updateSurfaceTaken(currentMap, curSurfaceList.get(i));
+                    }
+                }
             }
 
+            if (takeImageFlag) {
+                saveImage();
+            }
         }
         return curSurfaceList;
     }
 
+    public void updateSurfaceTaken(Map currentMap, MapObjectSurface tempObstacleSurface){
+        if (tempObstacleSurface.getSurface() == MapDirections.RIGHT){
+            currentMap.getGrid(tempObstacleSurface.getPos().y, tempObstacleSurface.getPos().x).setSurfaceRightTaken(true);
+        }
+        if (tempObstacleSurface.getSurface() == MapDirections.LEFT){
+            currentMap.getGrid(tempObstacleSurface.getPos().y, tempObstacleSurface.getPos().x).setSurfaceLeftTaken(true);
+        }
+        if (tempObstacleSurface.getSurface() == MapDirections.UP){
+            currentMap.getGrid(tempObstacleSurface.getPos().y, tempObstacleSurface.getPos().x).setSurfaceUpTaken(true);
+        }
+        if (tempObstacleSurface.getSurface() == MapDirections.DOWN){
+            currentMap.getGrid(tempObstacleSurface.getPos().y, tempObstacleSurface.getPos().x).setSurfaceDownTaken(true);
+        }
+    }
+
+    public boolean isSurfaceTaken(MapGrid mapGrid, MapDirections mapDirections){
+        if (mapDirections == MapDirections.UP){
+            return mapGrid.isSurfaceUpTaken();
+        }
+        if (mapDirections == MapDirections.DOWN){
+            return mapGrid.isSurfaceDownTaken();
+        }
+        if (mapDirections == MapDirections.RIGHT){
+            return mapGrid.isSurfaceRightTaken();
+        }
+        if (mapDirections == MapDirections.LEFT){
+            return mapGrid.isSurfaceLeftTaken();
+        }
+        return true;
+    }
+
     public void saveImage() {
+        imagesTakenCounter++;
+        System.out.println("imagesTakenCounter: " + imagesTakenCounter);
+
+
         HashMap<String, Integer> sensorRes = new HashMap<String, Integer>();
 
         netMgr.send("I", NetworkConstants.EXPLORATION);
@@ -542,7 +594,6 @@ public class ImageRecognition {
 
             robot.setAllImageList(imageList);
         }
-
 }
 
 
