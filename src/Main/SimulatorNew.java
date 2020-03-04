@@ -1296,6 +1296,7 @@ public class SimulatorNew extends Application {
             System.out.println(Thread.currentThread().getName());
             System.out.println(explore.getExploredPercentage());
             robot.setStatus("Done exploration\n");
+            System.out.println("Done Exploration");
 
             if (!sim) {
                 robot.send_android(exploredMap, NetworkConstants.MDF);
@@ -1387,6 +1388,7 @@ public class SimulatorNew extends Application {
                     String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
                     netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
                     netMgr.receive();   // to flush out sensor reading
+                    netMgr.send("Q", "Ex");
  //                   statusReceived.setText(netMgr.receive() + "\n");
                 }
                 // remove it from commands ArrayList
@@ -1397,6 +1399,7 @@ public class SimulatorNew extends Application {
             LOGGER.info("Checking FPCmdString: " + cmd);
 
             robot.setStatus("Ready to start fastest path. Waiting for command.\n");
+            System.out.println("Ready to start fastest path");
             LOGGER.info(robot.getStatus());
             // TODO: do not send due to MDF - for dummy rpi debugging
 //            robot.send_android();
@@ -1422,8 +1425,25 @@ public class SimulatorNew extends Application {
 //            if (!sim) {
 //                netMgr.send(alignRightDummy + cmd, NetworkConstants.FASTEST_PATH);
 //            }
-            if(!sim)
+
+            System.out.println(cmd);
+            String strArr[] = cmd.split(",");
+            String cmdPart2 = strArr[strArr.length-1] + "," + strArr[strArr.length-2];
+
+            String cmdPart1 = strArr[0];
+            for (int i = 0; i < strArr.length - 2; i++) {
+                cmdPart1 += strArr[i];
+            }
+
+            System.out.println(cmdPart1);
+            System.out.println(cmdPart2);
+
+
+            if(!sim){
                 netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
+                netMgr.send(cmdPart1, NetworkConstants.FASTEST_PATH);
+                netMgr.send(cmdPart2, NetworkConstants.FASTEST_PATH);
+            }
 
             String[] cmdStr = cmd.split("\\,");
 
@@ -1653,14 +1673,14 @@ public class SimulatorNew extends Application {
             case DOWN:
                 robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                netMgr.send("H", "Ex");
+                netMgr.send("G", "Ex");
                 break;
             case RIGHT:
 
                 break;
             case LEFT:
                 robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
-                netMgr.send("G", "Ex");
+                netMgr.send("H", "Ex");
                 break;
         }
         robot.setSimulation(false);

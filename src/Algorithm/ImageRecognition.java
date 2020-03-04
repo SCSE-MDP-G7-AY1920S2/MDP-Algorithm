@@ -486,8 +486,8 @@ public class ImageRecognition {
             }
 
             // Check if surface already taken
-//            if (!simulation && (curSurfaceList.size() > 0)){
-            if ((curSurfaceList.size() > 0)){
+            if (!simulation && (curSurfaceList.size() > 0)){
+//            if ((curSurfaceList.size() > 0)){
                 for (int i = 0; i < curSurfaceList.size(); i++) {
                     System.out.println(curSurfaceList.get(i).getPos().x + " " + curSurfaceList.get(i).getPos().y + " " + curSurfaceList.get(i).getSurface());
                     MapGrid temp_cell = currentMap.getGrid(curSurfaceList.get(i).getPos().y, curSurfaceList.get(i).getPos().x);
@@ -537,6 +537,7 @@ public class ImageRecognition {
     }
 
     public void saveImage() {
+
         imagesTakenCounter++;
         System.out.println("imagesTakenCounter: " + imagesTakenCounter);
 
