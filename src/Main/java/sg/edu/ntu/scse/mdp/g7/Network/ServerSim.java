@@ -1,4 +1,4 @@
-package Network;
+package sg.edu.ntu.scse.mdp.g7.Network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

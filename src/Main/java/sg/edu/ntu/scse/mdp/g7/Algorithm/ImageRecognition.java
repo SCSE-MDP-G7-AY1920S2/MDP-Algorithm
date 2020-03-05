@@ -1,21 +1,20 @@
-package Algorithm;
+package sg.edu.ntu.scse.mdp.g7.Algorithm;
 
-//Map
-import Map.Map;
-import Map.MapDirections;
-import Map.MapGrid;
-import Map.MapConstants;
-import Map.MapObjectSurface;
+//sg.edu.ntu.scse.mdp.g7.Map
+import sg.edu.ntu.scse.mdp.g7.Map.Map;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDirections;
+import sg.edu.ntu.scse.mdp.g7.Map.MapGrid;
+import sg.edu.ntu.scse.mdp.g7.Map.MapConstants;
+import sg.edu.ntu.scse.mdp.g7.Map.MapObjectSurface;
 
-//Network
-import Network.NetworkManager;
-import Network.NetworkConstants;
+//sg.edu.ntu.scse.mdp.g7.Network
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkManager;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkConstants;
 
-//Robot
-import Robot.Robot;
-import Robot.RoboCmd;
-import Robot.RobotConstants;
-import Robot.RobotSensors;
+//sg.edu.ntu.scse.mdp.g7.Robot
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
+import sg.edu.ntu.scse.mdp.g7.Robot.RoboCmd;
+import sg.edu.ntu.scse.mdp.g7.Robot.RobotConstants;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -36,11 +35,11 @@ public class ImageRecognition {
 
     private HashSet<String> imageHashSet = new HashSet<String>();
 
-    //Map
+    //sg.edu.ntu.scse.mdp.g7.Map
     private Map realMap;
     private Map currentMap;
 
-    //Robot
+    //sg.edu.ntu.scse.mdp.g7.Robot
     private Robot robot;
     private Point startPos;
     private int prevLocY;

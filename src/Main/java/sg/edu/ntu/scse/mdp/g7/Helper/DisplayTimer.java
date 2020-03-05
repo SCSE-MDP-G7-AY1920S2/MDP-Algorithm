@@ -1,6 +1,4 @@
-package Helper;
-import javafx.animation.Animation;
-import javafx.scene.control.*;
+package sg.edu.ntu.scse.mdp.g7.Helper;
 import java.lang.*;
 import javafx.animation.AnimationTimer;
 

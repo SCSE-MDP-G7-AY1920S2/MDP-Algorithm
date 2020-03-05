@@ -1,4 +1,4 @@
-package Robot;
+package sg.edu.ntu.scse.mdp.g7.Robot;
 
 import javafx.scene.paint.Color;
 
@@ -29,7 +29,7 @@ public class RobotConstants {
     public static final int CAM_MIN = 1;
     public static final int CAM_MAX = 1;
 
-    //Constants to render Robot
+    //Constants to render sg.edu.ntu.scse.mdp.g7.Robot
     public static final Color ROBOT_BODY = Color.rgb(59, 89, 152, 1);
     public static final Color ROBOT_OUTLINE = Color.BLACK;
     public static final Color ROBOT_DIRECTION = Color.WHITESMOKE;

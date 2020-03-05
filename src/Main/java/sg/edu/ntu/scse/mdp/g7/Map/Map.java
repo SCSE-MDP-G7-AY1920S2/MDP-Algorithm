@@ -1,10 +1,8 @@
-package Map;
+package sg.edu.ntu.scse.mdp.g7.Map;
 
 import java.awt.Point;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Map {
 
@@ -109,7 +107,7 @@ public class Map {
     }
 
     /**
-     * Check if the row and col is within the Map
+     * Check if the row and col is within the sg.edu.ntu.scse.mdp.g7.Map
      * @param row
      * @param col
      * @return

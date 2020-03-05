@@ -1,26 +1,21 @@
-package Algorithm;
+package sg.edu.ntu.scse.mdp.g7.Algorithm;
 
-//Map
-import Map.Map;
-import Map.MapDirections;
-import Map.MapGrid;
-import Map.MapConstants;
+//sg.edu.ntu.scse.mdp.g7.Map
+import sg.edu.ntu.scse.mdp.g7.Map.Map;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDirections;
+import sg.edu.ntu.scse.mdp.g7.Map.MapGrid;
+import sg.edu.ntu.scse.mdp.g7.Map.MapConstants;
 
-//Network
-import Network.NetworkManager;
-import Network.NetworkConstants;
+//sg.edu.ntu.scse.mdp.g7.Network
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkManager;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkConstants;
 
-//Robot
-import Robot.Robot;
-import Robot.RoboCmd;
-import Robot.RobotConstants;
-import Robot.RobotSensors;
+//sg.edu.ntu.scse.mdp.g7.Robot
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
+import sg.edu.ntu.scse.mdp.g7.Robot.RoboCmd;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Exploration {
@@ -29,11 +24,11 @@ public class Exploration {
 
     private boolean simulation;
 
-    //Map
+    //sg.edu.ntu.scse.mdp.g7.Map
     private Map realMap;
     private Map currentMap;
 
-    //Robot
+    //sg.edu.ntu.scse.mdp.g7.Robot
     private Robot robot;
     private Point startPos;
     private int prevLocY;

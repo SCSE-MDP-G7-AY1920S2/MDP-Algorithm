@@ -1,8 +1,6 @@
-package Map;
+package sg.edu.ntu.scse.mdp.g7.Map;
 
 import javafx.scene.paint.Color;
-
-import java.awt.*;
 
 public class MapConstants {
     public static final short GRID_SIZE = 10;

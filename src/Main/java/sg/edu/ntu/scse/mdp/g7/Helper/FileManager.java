@@ -1,5 +1,5 @@
-package Helper;
-import Network.NetworkConstants;
+package sg.edu.ntu.scse.mdp.g7.Helper;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkConstants;
 import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;

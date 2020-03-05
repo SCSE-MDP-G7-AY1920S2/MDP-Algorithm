@@ -1,8 +1,8 @@
-package Robot;
+package sg.edu.ntu.scse.mdp.g7.Robot;
 
 import java.awt.*;
 
-import Map.*;
+import sg.edu.ntu.scse.mdp.g7.Map.*;
 
 public class RobotCamera {
 

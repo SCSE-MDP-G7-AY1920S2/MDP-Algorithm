@@ -1,4 +1,4 @@
-package Map;
+package sg.edu.ntu.scse.mdp.g7.Map;
 
 public enum MapDirections {
 

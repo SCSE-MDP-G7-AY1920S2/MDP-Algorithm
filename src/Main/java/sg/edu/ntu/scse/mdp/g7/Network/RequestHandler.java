@@ -1,10 +1,10 @@
-package Network;
+package sg.edu.ntu.scse.mdp.g7.Network;
 
-import Map.Map;
-import Map.MapDescriptor;
-import Map.MapDirections;
-import Map.MapConstants;
-import Robot.*;
+import sg.edu.ntu.scse.mdp.g7.Map.Map;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDescriptor;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDirections;
+import sg.edu.ntu.scse.mdp.g7.Map.MapConstants;
+import sg.edu.ntu.scse.mdp.g7.Robot.*;
 
 import java.awt.*;
 import java.io.*;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Robot.Robot;
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
 import org.json.JSONObject;
 
 

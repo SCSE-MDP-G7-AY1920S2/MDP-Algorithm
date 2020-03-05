@@ -1,23 +1,20 @@
-package Robot;
+package sg.edu.ntu.scse.mdp.g7.Robot;
 
-import Map.Map;
-import Map.MapDirections;
-import Map.MapDescriptor;
-import Map.MapConstants;
-import Map.MapGrid;
-import Map.MapObjectSurface;
+import sg.edu.ntu.scse.mdp.g7.Map.Map;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDirections;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDescriptor;
+import sg.edu.ntu.scse.mdp.g7.Map.MapConstants;
+import sg.edu.ntu.scse.mdp.g7.Map.MapGrid;
+import sg.edu.ntu.scse.mdp.g7.Map.MapObjectSurface;
 
 import java.awt.Point;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import Network.NetworkManager;
-import Network.NetworkConstants;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkManager;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkConstants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -33,7 +30,7 @@ public class Robot {
     private boolean imageRecognition = false;
     private boolean isExploration = false;
 
-    //Robot
+    //sg.edu.ntu.scse.mdp.g7.Robot
     private Point curLocation;         // the current location of the robot
     private MapDirections dir;         // the direction the robot is facing (UP, DOWN, LEFT, RIGHT)
     private String status;
@@ -61,7 +58,7 @@ public class Robot {
     // for delay in sim
     private long tempStartTime, tempEndTime, tempDiff;
 
-    //Network
+    //sg.edu.ntu.scse.mdp.g7.Network
     private static final NetworkManager netMgr = NetworkManager.getInstance();
 
     public int getMoveCounter() {
@@ -214,7 +211,7 @@ public class Robot {
      */
 
     /**
-     * Constructor to create a Robot Object.
+     * Constructor to create a sg.edu.ntu.scse.mdp.g7.Robot Object.
      *
      * @param simulation To check if this is a simulation or an actual run
      * @param fastestPath To check if the robot will be doing exploration or fastest path.
@@ -241,7 +238,7 @@ public class Robot {
     }
 
     /**
-     * Set the Robot and sensor position.
+     * Set the sg.edu.ntu.scse.mdp.g7.Robot and sensor position.
      *
      * @param row the location, Point y, of the robot.
      * @param col the location, Point x, of the robot.
@@ -277,7 +274,7 @@ public class Robot {
     }
 
     /**
-     * Robot movement with direction (forward, backward) and steps) and Map updated.
+     * sg.edu.ntu.scse.mdp.g7.Robot movement with direction (forward, backward) and steps) and sg.edu.ntu.scse.mdp.g7.Map updated.
      *
      * @param cmd         FORWARD or BACKWARD
      * @param steps       number of steps moved by the robot
@@ -356,7 +353,7 @@ public class Robot {
     }
 
     /**
-     * Rotate Robot(LEFT_TURN, RIGHT_TURN)
+     * Rotate sg.edu.ntu.scse.mdp.g7.Robot(LEFT_TURN, RIGHT_TURN)
      * @param cmd the command to turn the robot left or right
      */
     public void turn(RoboCmd cmd, int stepsPerSecond) throws InterruptedException {
@@ -371,13 +368,13 @@ public class Robot {
         switch (cmd) {
             case LEFT_TURN:
                 dir = MapDirections.getAntiClockwise(dir);
-                LOGGER.info("Rotating Robot Left");
+                LOGGER.info("Rotating sg.edu.ntu.scse.mdp.g7.Robot Left");
                 rotateSensors(MapDirections.LEFT);
                 rotateCamera(MapDirections.LEFT);
                 break;
             case RIGHT_TURN:
                 dir = MapDirections.getClockwise(dir);
-                LOGGER.info("Rotating Robot Right");
+                LOGGER.info("Rotating sg.edu.ntu.scse.mdp.g7.Robot Right");
                 rotateSensors(MapDirections.RIGHT);
                 rotateCamera(MapDirections.RIGHT);
                 break;
@@ -606,10 +603,10 @@ public class Robot {
     }
 
     /**
-     * Robot sensing surrounding obstacles for simulator
+     * sg.edu.ntu.scse.mdp.g7.Robot sensing surrounding obstacles for simulator
      *
-     * @param exploredMap the current Map which is being explored
-     * @param realMap the actual Map
+     * @param exploredMap the current sg.edu.ntu.scse.mdp.g7.Map which is being explored
+     * @param realMap the actual sg.edu.ntu.scse.mdp.g7.Map
      */
     public void sense(Map exploredMap, Map realMap) {
         HashMap<String, Integer> sensorResult = updateAllSensorResult(realMap);
@@ -709,7 +706,7 @@ public class Robot {
         int rowInc = 0, colInc = 0, row, col;
 
         if (sensorResult == null) {
-            LOGGER.warning("Invalid msg. Map not updated");
+            LOGGER.warning("Invalid msg. sg.edu.ntu.scse.mdp.g7.Map not updated");
             return;
         }
 
@@ -745,7 +742,7 @@ public class Robot {
                 row = sensor.getRow() + rowInc * j;
                 col = sensor.getCol() + colInc * j;
 
-                // check whether the block is valid otherwise exit (Edge of Map)
+                // check whether the block is valid otherwise exit (Edge of sg.edu.ntu.scse.mdp.g7.Map)
                 if (exploredMap.checkValidGrid(row, col)) {
                     exploredMap.getGrid(row, col).setExplored(true);
                     if (!exploredMap.getGrid(row, col).getMoveThru() && j == obsBlock) {
@@ -919,12 +916,12 @@ public class Robot {
      */
     @Override
     public String toString() {
-        String s = String.format("Robot at %s facing %s\n", curLocation.toString(), dir.toString());
+        String s = String.format("sg.edu.ntu.scse.mdp.g7.Robot at %s facing %s\n", curLocation.toString(), dir.toString());
         return s;
     }
 
     /**
-     * Convert Robot Command into Arduino Command
+     * Convert sg.edu.ntu.scse.mdp.g7.Robot Command into Arduino Command
      * @param cmd an enum from RoboCmd
      * @param steps number of steps to take
      * @return
@@ -1040,7 +1037,7 @@ public class Robot {
     }
 
     /**
-     * Robot is right hugging the wall if the right sensor position is equal to
+     * sg.edu.ntu.scse.mdp.g7.Robot is right hugging the wall if the right sensor position is equal to
      * the lowest or highest possible row or col number
      *
      * @return

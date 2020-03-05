@@ -1,18 +1,15 @@
-package Network;
+package sg.edu.ntu.scse.mdp.g7.Network;
 
-import Algorithm.Exploration;
-import Main.SimulatorNew;
-import Map.Map;
-import Map.MapDescriptor;
-import Robot.Robot;
-import org.json.JSONArray;
+import sg.edu.ntu.scse.mdp.g7.Algorithm.Exploration;
+import sg.edu.ntu.scse.mdp.g7.Map.Map;
+import sg.edu.ntu.scse.mdp.g7.Map.MapDescriptor;
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
 
 /**

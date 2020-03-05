@@ -1,17 +1,17 @@
-package Main;
+package sg.edu.ntu.scse.mdp.g7.Main;
 
-import Algorithm.Exploration;
-import Algorithm.FastestPath;
-import Algorithm.ImageRecognition;
-import Helper.DisplayTimer;
-import Helper.FileManager;
-import Map.*;
-import Network.NetworkConstants;
-import Network.NetworkManager;
-import Robot.RoboCmd;
-import Robot.Robot;
-import Robot.RobotConstants;
-import Robot.RobotSensors;
+import sg.edu.ntu.scse.mdp.g7.Algorithm.Exploration;
+import sg.edu.ntu.scse.mdp.g7.Algorithm.FastestPath;
+import sg.edu.ntu.scse.mdp.g7.Algorithm.ImageRecognition;
+import sg.edu.ntu.scse.mdp.g7.Helper.DisplayTimer;
+import sg.edu.ntu.scse.mdp.g7.Helper.FileManager;
+import sg.edu.ntu.scse.mdp.g7.Map.*;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkConstants;
+import sg.edu.ntu.scse.mdp.g7.Network.NetworkManager;
+import sg.edu.ntu.scse.mdp.g7.Robot.RoboCmd;
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
+import sg.edu.ntu.scse.mdp.g7.Robot.RobotConstants;
+import sg.edu.ntu.scse.mdp.g7.Robot.RobotSensors;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -56,7 +56,7 @@ public class SimulatorNew extends Application {
 
 
     // Program Variables
-    private Map map; // Used to hold loaded Map for sim
+    private Map map; // Used to hold loaded sg.edu.ntu.scse.mdp.g7.Map for sim
     private Map exploredMap;
     private Map newExploredMap;
     private Point wayPoint = new Point(MapConstants.GOALZONE_COL, MapConstants.GOALZONE_ROW);
@@ -135,10 +135,10 @@ public class SimulatorNew extends Application {
 
 
     public void start(Stage primaryStage) {
-        // Init for Map and Robot
+        // Init for sg.edu.ntu.scse.mdp.g7.Map and sg.edu.ntu.scse.mdp.g7.Robot
         map = new Map();
         newExploredMap = new Map();
-        // Set to all explored for loading and saving Map
+        // Set to all explored for loading and saving sg.edu.ntu.scse.mdp.g7.Map
         map.setAllExplored(true);
         exploredMap = new Map();
 
@@ -258,13 +258,13 @@ public class SimulatorNew extends Application {
         timeLimitTxt.setMaxWidth(100);
         coverageLimitTxt.setMaxWidth(100);
 
-        mapChoiceLbl = new Label("Map File: ");
+        mapChoiceLbl = new Label("sg.edu.ntu.scse.mdp.g7.Map File: ");
         mapTxt = new TextField();
         mapTxt.setText(defaultMapPath);
         mapTxt.setDisable(true);
         mapTxt.setMaxWidth(MAX_WIDTH);
 
-        statusLbl = new Label("Robot Status");
+        statusLbl = new Label("sg.edu.ntu.scse.mdp.g7.Robot Status");
         statusLbl.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         statusLbl.setMaxWidth(MAX_WIDTH);
 
@@ -282,10 +282,10 @@ public class SimulatorNew extends Application {
         showImgBtn = new Button("Show Image");
 //        startExpBtn = new Button("Start");
 //        startFPBtn = new Button("Start");
-        loadMapBtn = new Button("Load Map");
-        newMapBtn = new Button("New Map");
-        saveMapBtn = new Button("Save Map");
-        resetMapBtn = new Button("Reset Map");
+        loadMapBtn = new Button("Load sg.edu.ntu.scse.mdp.g7.Map");
+        newMapBtn = new Button("New sg.edu.ntu.scse.mdp.g7.Map");
+        saveMapBtn = new Button("Save sg.edu.ntu.scse.mdp.g7.Map");
+        resetMapBtn = new Button("Reset sg.edu.ntu.scse.mdp.g7.Map");
         setWaypointBtn = new Button("Reset Waypoint");
         setWaypointBtn.setMaxWidth(MAX_WIDTH);
         setRobotBtn = new Button("Reset Starting Position");
@@ -598,12 +598,12 @@ public class SimulatorNew extends Application {
 //                setObstacle = !setObstacle;
 //                if (!setObstacle) {
 //                    setObstacleBtn.setText("Set Obstacles");
-//                    loadMapBtn.setText("Load Explored Map");
-//                    saveMapBtn.setText("Save Explored Map");
+//                    loadMapBtn.setText("Load Explored sg.edu.ntu.scse.mdp.g7.Map");
+//                    saveMapBtn.setText("Save Explored sg.edu.ntu.scse.mdp.g7.Map");
 //                } else {
 //                    setObstacleBtn.setText("Confirm Obstacles");
-//                    loadMapBtn.setText("Load Map");
-//                    saveMapBtn.setText("Save Map");
+//                    loadMapBtn.setText("Load sg.edu.ntu.scse.mdp.g7.Map");
+//                    saveMapBtn.setText("Save sg.edu.ntu.scse.mdp.g7.Map");
 //                }
 //                setRobot = false;
 //                setWaypoint = false;
@@ -611,7 +611,7 @@ public class SimulatorNew extends Application {
 //            }
 //        });
         loadMapBtn.setOnMouseClicked(e -> {
-            fileChooser.setTitle("Choose file to load Map from");
+            fileChooser.setTitle("Choose file to load sg.edu.ntu.scse.mdp.g7.Map from");
             File file = fileChooser.showOpenDialog(primaryStage);
             if (file != null) {
                 map.resetMap();
@@ -624,7 +624,7 @@ public class SimulatorNew extends Application {
             expMapDraw = true;
         });
         saveMapBtn.setOnMouseClicked(e -> {
-            fileChooser.setTitle("Choose file to save Map to");
+            fileChooser.setTitle("Choose file to save sg.edu.ntu.scse.mdp.g7.Map to");
             File file = fileChooser.showOpenDialog(primaryStage);
             if (file != null) {
                 mapDescriptor.saveRealMap(map, file.getAbsolutePath());
@@ -804,7 +804,7 @@ public class SimulatorNew extends Application {
                     default:
                         break;
                 }
-                System.out.println("Robot Direction AFTER:" + robot.getDir());
+                System.out.println("sg.edu.ntu.scse.mdp.g7.Robot Direction AFTER:" + robot.getDir());
             } catch (InterruptedException ex) {
                 LOGGER.warning("Interrupt Exception");
                 ex.printStackTrace();
@@ -820,12 +820,12 @@ public class SimulatorNew extends Application {
 
     } // end of start
 
-    // Draw the Map Graphics Cells
+    // Draw the sg.edu.ntu.scse.mdp.g7.Map Graphics Cells
     private void drawMap(boolean explored) {
         // Basic Init for the Cells
         gc.setStroke(MapConstants.CW_COLOR);
         gc.setLineWidth(2);
-        // Draw the Cells on the Map Canvas
+        // Draw the Cells on the sg.edu.ntu.scse.mdp.g7.Map Canvas
         for (int row = 0; row < MapConstants.MAP_LENGTH; row++) {
             for (int col = 0; col < MapConstants.MAP_WIDTH; col++) {
                 // Select Color of the Cells
@@ -854,7 +854,7 @@ public class SimulatorNew extends Application {
                     }
                 }
 
-                // Draw the Cell on the Map based on the Position Indicated
+                // Draw the Cell on the sg.edu.ntu.scse.mdp.g7.Map based on the Position Indicated
                 gc.strokeRect(col * MapConstants.MAP_CELL_SIZE + MapConstants.MAP_OFFSET / 2,
                         (MapConstants.MAP_CELL_SIZE - 1) * MapConstants.MAP_LENGTH - row * MapConstants.MAP_CELL_SIZE
                                 + MapConstants.MAP_OFFSET / 2,
@@ -865,7 +865,7 @@ public class SimulatorNew extends Application {
                         MapConstants.MAP_CELL_SIZE, MapConstants.MAP_CELL_SIZE);
             }
 
-            // Draw waypoint on the Map
+            // Draw waypoint on the sg.edu.ntu.scse.mdp.g7.Map
             if (wayPoint != null) {
                 gc.setFill(MapConstants.WP_COLOR);
                 gc.fillRect(wayPoint.getX() * MapConstants.MAP_CELL_SIZE + MapConstants.MAP_OFFSET / 2,
@@ -890,7 +890,7 @@ public class SimulatorNew extends Application {
         newGC.setStroke(MapConstants.CW_COLOR);
         newGC.setLineWidth(2);
 
-        // Draw the Cells on the Map Canvas
+        // Draw the Cells on the sg.edu.ntu.scse.mdp.g7.Map Canvas
         for (int row = 0; row < MapConstants.MAP_LENGTH; row++) {
             for (int col = 0; col < MapConstants.MAP_WIDTH; col++) {
                 // Select Color of the Cells
@@ -920,7 +920,7 @@ public class SimulatorNew extends Application {
                     }
                 }
 
-                // Draw the Cell on the Map based on the Position Indicated
+                // Draw the Cell on the sg.edu.ntu.scse.mdp.g7.Map based on the Position Indicated
                 newGC.strokeRect(col * MapConstants.MAP_CELL_SIZE + MapConstants.MAP_OFFSET / 2,
                         (MapConstants.MAP_CELL_SIZE - 1) * MapConstants.MAP_LENGTH - row * MapConstants.MAP_CELL_SIZE
                                 + MapConstants.MAP_OFFSET / 2,
@@ -931,7 +931,7 @@ public class SimulatorNew extends Application {
                         MapConstants.MAP_CELL_SIZE, MapConstants.MAP_CELL_SIZE);
             }
 
-            // Draw waypoint on the Map
+            // Draw waypoint on the sg.edu.ntu.scse.mdp.g7.Map
             if (wayPoint != null) {
                 newGC.setFill(MapConstants.WP_COLOR);
                 newGC.fillRect(wayPoint.getX() * MapConstants.MAP_CELL_SIZE + MapConstants.MAP_OFFSET / 2,
@@ -954,7 +954,7 @@ public class SimulatorNew extends Application {
 //
 //        try{
 //            // This block configure the logger with handler and formatterR
-//            fh = new FileHandler("C:/Users/jordan/Documents/GitHub/MDP-Algorithm/logs/log_test.log");
+//            fh = new FileHandler("C:/Users/jordan/Documents/GitHub/MDP-sg.edu.ntu.scse.mdp.g7.Algorithm/logs/log_test.log");
 //            LOGGER.addHandler(fh);
 //            SimpleFormatter formatter = new SimpleFormatter();
 //            fh.setFormatter(formatter);
@@ -988,8 +988,8 @@ public class SimulatorNew extends Application {
                         : "Unable to put waypoint at obstacle or virtual wall!");
             }
             if (setRobot)
-                System.out.println(setRobotLocation(selectedRow, selectedCol) ? "Robot Position has changed"
-                        : "Unable to put Robot at obstacle or virtual wall!");
+                System.out.println(setRobotLocation(selectedRow, selectedCol) ? "sg.edu.ntu.scse.mdp.g7.Robot Position has changed"
+                        : "Unable to put sg.edu.ntu.scse.mdp.g7.Robot at obstacle or virtual wall!");
 
 //                if (setObstacle) {
 //                    if (event.getButton() == MouseButton.PRIMARY)
@@ -1102,7 +1102,7 @@ public class SimulatorNew extends Application {
             return false;
     }
 
-    // Set Robot Location and Rotate
+    // Set sg.edu.ntu.scse.mdp.g7.Robot Location and Rotate
     private boolean setRobotLocation(int row, int col) {
         if (map.checkValidMove(row, col)) {
             Point point = new Point(col, row);
@@ -1110,7 +1110,7 @@ public class SimulatorNew extends Application {
             startPosTxt.setText(String.format("(%d, %d)", col, row));
             robot.setStartPos(row, col, exploredMap);
             exploredMap.setAllExplored(true);
-            System.out.println("Robot moved to new position at row: " + row + " col:" + col);
+            System.out.println("sg.edu.ntu.scse.mdp.g7.Robot moved to new position at row: " + row + " col:" + col);
             return true;
         }
         return false;
@@ -1543,7 +1543,7 @@ public class SimulatorNew extends Application {
                             robot.move(c, moves, exploredMap, RobotConstants.STEP_PER_SECOND);
                             netMgr.receive();
                             // TODO send to android
-                            //robot.sense(exploredMap, Map);
+                            //robot.sense(exploredMap, sg.edu.ntu.scse.mdp.g7.Map);
                         }
                     }
                 }
@@ -1559,7 +1559,7 @@ public class SimulatorNew extends Application {
                             netMgr.receive();
                         }
 
-//						robot.sense(exploredMap, Map);
+//						robot.sense(exploredMap, sg.edu.ntu.scse.mdp.g7.Map);
 //                        if (sim) {
 //                            try {
 //                                TimeUnit.MILLISECONDS.sleep(RobotConstants.WAIT_TIME * moves / steps);
@@ -1590,7 +1590,7 @@ public class SimulatorNew extends Application {
                         }
                     }
 
-//					robot.sense(exploredMap, Map);
+//					robot.sense(exploredMap, sg.edu.ntu.scse.mdp.g7.Map);
                     moves = 0;
                 }
 //                if (sim) {
@@ -1773,7 +1773,7 @@ public class SimulatorNew extends Application {
         robot.setStatus("Reset to start zone");
     }
 
-    // Draw Method for Robot
+    // Draw Method for sg.edu.ntu.scse.mdp.g7.Robot
     public void drawRobot() {
         gc.setStroke(RobotConstants.ROBOT_OUTLINE);
         gc.setLineWidth(2);

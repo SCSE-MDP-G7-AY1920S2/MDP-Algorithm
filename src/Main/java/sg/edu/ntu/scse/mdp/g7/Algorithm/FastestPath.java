@@ -1,15 +1,14 @@
-package Algorithm;
+package sg.edu.ntu.scse.mdp.g7.Algorithm;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import Map.*;
-import Network.NetworkManager;
-import Robot.Robot;
-import Robot.RoboCmd;
-import Robot.RobotConstants;
+import sg.edu.ntu.scse.mdp.g7.Map.*;
+import sg.edu.ntu.scse.mdp.g7.Robot.Robot;
+import sg.edu.ntu.scse.mdp.g7.Robot.RoboCmd;
+import sg.edu.ntu.scse.mdp.g7.Robot.RobotConstants;
 
 import static java.lang.Math.*;
 
