@@ -1149,6 +1149,17 @@ public class SimulatorNew extends Application {
             wayPoint = null;
             startPos = null;
             // receive start exploration command from android
+
+            LOGGER.info("CALIBRATING: init");
+            if (!sim) {
+                netMgr.send("Q", "Ex");
+//                String msg;
+                do {
+                    msg = netMgr.receive();
+                    LOGGER.info(msg);
+                } while (!msg.contains(NetworkConstants.CALI_FIN));
+            }
+
             if (!sim) {
                 do {
                     msg = netMgr.receive();
@@ -1388,8 +1399,14 @@ public class SimulatorNew extends Application {
                     String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
                     netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
                     netMgr.receive();   // to flush out sensor reading
-                    netMgr.send("Q", "Ex");
  //                   statusReceived.setText(netMgr.receive() + "\n");
+
+                    netMgr.send("Q", "Ex");
+                    String msg;
+                    do {
+                        msg = netMgr.receive();
+                        LOGGER.info(msg);
+                    } while (!msg.contains(NetworkConstants.CALI_FIN));
                 }
                 // remove it from commands ArrayList
                 commands.remove(0);
@@ -1428,11 +1445,13 @@ public class SimulatorNew extends Application {
 
             System.out.println(cmd);
             String strArr[] = cmd.split(",");
-            String cmdPart2 = strArr[strArr.length-1] + "," + strArr[strArr.length-2];
+            String cmdPart2 = strArr[strArr.length-2] + "," + strArr[strArr.length-1];
+            String cmdPart1 = "";
 
-            String cmdPart1 = strArr[0];
             for (int i = 0; i < strArr.length - 2; i++) {
                 cmdPart1 += strArr[i];
+                if(i != strArr.length-3)
+                    cmdPart1+=",";
             }
 
             System.out.println(cmdPart1);
@@ -1440,7 +1459,7 @@ public class SimulatorNew extends Application {
 
 
             if(!sim){
-                netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
+//                netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
                 netMgr.send(cmdPart1, NetworkConstants.FASTEST_PATH);
                 netMgr.send(cmdPart2, NetworkConstants.FASTEST_PATH);
             }
