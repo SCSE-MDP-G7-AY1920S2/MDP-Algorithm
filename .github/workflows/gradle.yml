@@ -25,9 +25,9 @@ jobs:
       run: ./gradlew build
     - name: Package JAR File
       run: ./gradlew jar
-    - name: Zip JAR and default map
-      run: cp ./build/libs/*.jar . && zip algoJar.zip *.jar defaultMap.txt
+    - name: Prepare JAR and Default Map for zipping
+      run: cp ./build/libs/*.jar . && mkdir algoProgram && mv *.jar ./algoProgram && mv defaultMap.txt ./algoProgram
     - uses: actions/upload-artifact@v1
       with:
-        name: algo-jar-zip
-        path: algoJar.zip
+        name: algo-jar
+        path: algoProgram
