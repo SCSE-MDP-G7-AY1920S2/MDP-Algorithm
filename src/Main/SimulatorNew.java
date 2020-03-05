@@ -1452,6 +1452,7 @@ public class SimulatorNew extends Application {
                 cmdPart1 += strArr[i];
                 if(i != strArr.length-3)
                     cmdPart1+=",";
+
             }
 
             System.out.println(cmdPart1);
@@ -1459,7 +1460,7 @@ public class SimulatorNew extends Application {
 
 
             if(!sim){
-//                netMgr.send(cmd, NetworkConstants.FASTEST_PATH);
+
                 netMgr.send(cmdPart1, NetworkConstants.FASTEST_PATH);
                 netMgr.send(cmdPart2, NetworkConstants.FASTEST_PATH);
             }
