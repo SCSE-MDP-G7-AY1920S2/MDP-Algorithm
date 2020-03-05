@@ -12,7 +12,7 @@ public class MapDescriptor {
     private String filename;
 
     /**
-     * Construct sg.edu.ntu.scse.mdp.g7.Map descriptor for when there is no input real sg.edu.ntu.scse.mdp.g7.Map text file
+     * Construct Map descriptor for when there is no input real Map text file
      */
     public MapDescriptor() {
         hexMapStr1 = "";
@@ -21,7 +21,7 @@ public class MapDescriptor {
     }
 
     /**
-     * Construct sg.edu.ntu.scse.mdp.g7.Map descriptor with given real sg.edu.ntu.scse.mdp.g7.Map text file
+     * Construct Map descriptor with given real Map text file
      */
     public MapDescriptor(String filename) throws IOException {
         setHexMapStr(filename);
@@ -194,9 +194,9 @@ public class MapDescriptor {
     }
 
     /**
-     * Load the explored arena in the sg.edu.ntu.scse.mdp.g7.Map
+     * Load the explored arena in the Map
      * @param MDFstr1
-     * @param map initialized empty sg.edu.ntu.scse.mdp.g7.Map
+     * @param map initialized empty Map
      */
     private void loadMDFString1(String MDFstr1, Map map) {
         String expStr = hexToBi(MDFstr1);
@@ -231,12 +231,12 @@ public class MapDescriptor {
 
 
     /**
-     * Load real sg.edu.ntu.scse.mdp.g7.Map for simulator
+     * Load real Map for simulator
      * @param map initialized empty
      */
     public void loadRealMap(Map map) {
         if(filename == "") {
-            LOGGER.warning("No MDF found! sg.edu.ntu.scse.mdp.g7.Map not loaded!\n");
+            LOGGER.warning("No MDF found! Map not loaded!\n");
         }
         else {
             loadMDFString1(this.hexMapStr1, map);

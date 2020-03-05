@@ -1,22 +1,26 @@
 package Algorithm;
 
-//sg.edu.ntu.scse.mdp.g7.Map
+//Map
 import Map.Map;
-import Map;
-import MapDirections;
-import MapGrid;
-import MapConstants;
+import Map.MapDirections;
+import Map.MapGrid;
+import Map.MapConstants;
 
-//sg.edu.ntu.scse.mdp.g7.Network
+//Network
 import Network.NetworkManager;
 import Network.NetworkConstants;
 
-//sg.edu.ntu.scse.mdp.g7.Robot
-import Robot;
-import RoboCmd;
+//Robot
+import Robot.Robot;
+import Robot.RoboCmd;
+import Robot.RobotConstants;
+import Robot.RobotSensors;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Exploration {
@@ -25,11 +29,11 @@ public class Exploration {
 
     private boolean simulation;
 
-    //sg.edu.ntu.scse.mdp.g7.Map
+    //Map
     private Map realMap;
     private Map currentMap;
 
-    //sg.edu.ntu.scse.mdp.g7.Robot
+    //Robot
     private Robot robot;
     private Point startPos;
     private int prevLocY;
@@ -634,19 +638,19 @@ public class Exploration {
         boolean isMovable = false;
 
         switch (dir) {
-            case MapDirections.UP:
+            case UP:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y + 1, robot.getCurLocation().x);
                 break;
 
-            case MapDirections.DOWN:
+            case DOWN:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y - 1, robot.getCurLocation().x);
                 break;
 
-            case MapDirections.LEFT:
+            case LEFT:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y, robot.getCurLocation().x - 1);
                 break;
 
-            case MapDirections.RIGHT:
+            case RIGHT:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y, robot.getCurLocation().x + 1);
                 break;
         }

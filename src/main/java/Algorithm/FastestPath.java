@@ -5,12 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import Map.Map;
+import Map.*;
+import Network.NetworkManager;
 import Robot.Robot;
-import sg.edu.ntu.scse.mdp.g7.Map.*;
-import Robot;
-import RoboCmd;
-import RobotConstants;
+import Robot.RoboCmd;
+import Robot.RobotConstants;
 
 import static java.lang.Math.*;
 
@@ -170,16 +169,16 @@ public class FastestPath {
         MapDirections dir = robotDir;
 
         switch (dir){
-            case MapDirections.UP:
+            case UP:
                 if (initial.y + 1 == target.y)
                     return false;
-            case MapDirections.DOWN:
+            case DOWN:
                 if (initial.y - 1 == target.y)
                     return false;
-            case MapDirections.LEFT:
+            case LEFT:
                 if (initial.x - 1 == target.x)
                     return false;
-            case MapDirections.RIGHT:
+            case RIGHT:
                 if (initial.x + 1 == target.x)
                     return false;
         }

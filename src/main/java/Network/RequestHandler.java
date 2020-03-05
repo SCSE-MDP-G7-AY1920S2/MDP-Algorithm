@@ -2,11 +2,9 @@ package Network;
 
 import Map.Map;
 import Map.MapDescriptor;
-import Map;
-import MapDescriptor;
-import MapDirections;
-import MapConstants;
-import sg.edu.ntu.scse.mdp.g7.Robot.*;
+import Map.MapDirections;
+import Map.MapConstants;
+import Robot.*;
 
 import java.awt.*;
 import java.io.*;
@@ -16,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Robot;
+import Robot.Robot;
 import org.json.JSONObject;
 
 

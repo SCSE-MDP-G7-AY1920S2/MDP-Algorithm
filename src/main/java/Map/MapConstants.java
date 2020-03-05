@@ -2,6 +2,8 @@ package Map;
 
 import javafx.scene.paint.Color;
 
+import java.awt.*;
+
 public class MapConstants {
     public static final short GRID_SIZE = 10;
     public static final short MAP_LENGTH = 20;

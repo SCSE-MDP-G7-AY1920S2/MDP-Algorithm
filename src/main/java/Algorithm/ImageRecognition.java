@@ -1,21 +1,21 @@
 package Algorithm;
 
-//sg.edu.ntu.scse.mdp.g7.Map
+//Map
 import Map.Map;
-import Map;
-import MapDirections;
-import MapGrid;
-import MapConstants;
-import MapObjectSurface;
+import Map.MapDirections;
+import Map.MapGrid;
+import Map.MapConstants;
+import Map.MapObjectSurface;
 
-//sg.edu.ntu.scse.mdp.g7.Network
+//Network
 import Network.NetworkManager;
 import Network.NetworkConstants;
 
-//sg.edu.ntu.scse.mdp.g7.Robot
-import Robot;
-import RoboCmd;
-import RobotConstants;
+//Robot
+import Robot.Robot;
+import Robot.RoboCmd;
+import Robot.RobotConstants;
+import Robot.RobotSensors;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -36,11 +36,11 @@ public class ImageRecognition {
 
     private HashSet<String> imageHashSet = new HashSet<String>();
 
-    //sg.edu.ntu.scse.mdp.g7.Map
+    //Map
     private Map realMap;
     private Map currentMap;
 
-    //sg.edu.ntu.scse.mdp.g7.Robot
+    //Robot
     private Robot robot;
     private Point startPos;
     private int prevLocY;
@@ -422,19 +422,19 @@ public class ImageRecognition {
         MapDirections camDir = robot.getRightCam().getCameraDir();
 
         switch (camDir) {
-            case MapDirections.UP:
+            case UP:
                 rowInc = 1;
                 colInc = 0;
                 break;
-            case MapDirections.DOWN:
+            case DOWN:
                 rowInc = -1;
                 colInc = 0;
                 break;
-            case MapDirections.LEFT:
+            case LEFT:
                 colInc = -1;
                 rowInc = 0;
                 break;
-            case MapDirections.RIGHT:
+            case RIGHT:
                 colInc = 1;
                 rowInc = 0;
                 break;
@@ -551,19 +551,19 @@ public class ImageRecognition {
         int rowInc=0, colInc=0;
 
         switch (camDir) {
-            case MapDirections.UP:
+            case UP:
                 rowInc = 1;
                 colInc = 0;
                 break;
-            case MapDirections.DOWN:
+            case DOWN:
                 rowInc = -1;
                 colInc = 0;
                 break;
-            case MapDirections.LEFT:
+            case LEFT:
                 colInc = -1;
                 rowInc = 0;
                 break;
-            case MapDirections.RIGHT:
+            case RIGHT:
                 colInc = 1;
                 rowInc = 0;
                 break;
@@ -601,19 +601,19 @@ public class ImageRecognition {
     public boolean movable(MapDirections dir) {
         boolean isMovable = false;
         switch (dir) {
-            case MapDirections.UP:
+            case UP:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y + 1, robot.getCurLocation().x);
                 break;
 
-            case MapDirections.DOWN:
+            case DOWN:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y - 1, robot.getCurLocation().x);
                 break;
 
-            case MapDirections.LEFT:
+            case LEFT:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y, robot.getCurLocation().x - 1);
                 break;
 
-            case MapDirections.RIGHT:
+            case RIGHT:
                 isMovable = currentMap.checkValidMove(robot.getCurLocation().y, robot.getCurLocation().x + 1);
                 break;
         }

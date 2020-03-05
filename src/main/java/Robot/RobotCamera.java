@@ -2,9 +2,7 @@ package Robot;
 
 import java.awt.*;
 
-import Map.Map;
-import Map.MapDirections;
-import sg.edu.ntu.scse.mdp.g7.Map.*;
+import Map.*;
 
 public class RobotCamera {
 

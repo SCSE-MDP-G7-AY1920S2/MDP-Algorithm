@@ -1,4 +1,6 @@
 package Helper;
+import javafx.animation.Animation;
+import javafx.scene.control.*;
 import java.lang.*;
 import javafx.animation.AnimationTimer;
 
