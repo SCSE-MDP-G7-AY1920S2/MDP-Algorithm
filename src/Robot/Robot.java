@@ -1291,7 +1291,7 @@ public class Robot {
         for (Point imgPoint : imageList.keySet()) {
             imgs[i][0] = Integer.toString(imgPoint.x);
             imgs[i][1] = Integer.toString(imgPoint.y);
-            imgs[i][2] =  imageList.get(imgPoint);
+            imgs[i][2] = imageList.get(imgPoint);
             i++;
         }
 
