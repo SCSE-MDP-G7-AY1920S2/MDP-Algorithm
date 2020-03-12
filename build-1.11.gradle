@@ -1,14 +1,12 @@
 plugins {
     id 'java'
- //       id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
-/*
 javafx {
     version = "11.0.2"
     modules = [ 'javafx.controls' ]
 }
-*/
 
 wrapper {
     gradleVersion = '5.2.1'
