@@ -810,8 +810,8 @@ public class SimulatorNew extends Application {
 //                                msg = NetMgr.getInstance().receive();
 //                            } while(msg.charAt(0) == 'F');
 //                            System.out.println(msg);
-                        String to_send = String.format("I%d|%d|%s", 6, 3, MapDirections.getClockwise(MapDirections.UP).toString());
-                        netMgr.send(to_send, NetworkConstants.EXPLORATION);
+//                        String to_send = String.format("I%d|%d|%s", 6, 3, MapDirections.getClockwise(MapDirections.UP).toString());
+//                        netMgr.send(to_send, NetworkConstants.EXPLORATION);
                         break;
                     default:
                         break;
@@ -1389,29 +1389,30 @@ public class SimulatorNew extends Application {
             // TODO: check to send one single command or one by one
             ArrayList<RoboCmd> commands = fp.getPathCommands(path);
 
+            if (!sim) {
+                // send separate msg to arduino as findingFP == true, no command is sent to arduino
+                String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
+                netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
+                netMgr.receive();   // to flush out sensor reading
+                //                   statusReceived.setText(netMgr.receive() + "\n");
+
+                netMgr.send("Q", "Ex");
+                String msg;
+                do {
+                    msg = netMgr.receive();
+                    LOGGER.info(msg);
+                } while (!msg.contains(NetworkConstants.CALI_FIN));
+            }
+
             // execute the first command if it is turning
             RoboCmd firstCmd = commands.get(0);
-            if (firstCmd == RoboCmd.RIGHT_TURN) {
+            if (firstCmd == RoboCmd.LEFT_TURN) {
                 robot.turn(firstCmd, RobotConstants.STEP_PER_SECOND);
-
-                if (!sim) {
-                    // send separate msg to arduino as findingFP == true, no command is sent to arduino
-                    String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
-                    netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
-                    netMgr.receive();   // to flush out sensor reading
- //                   statusReceived.setText(netMgr.receive() + "\n");
-
-                    netMgr.send("Q", "Ex");
-                    String msg;
-                    do {
-                        msg = netMgr.receive();
-                        LOGGER.info(msg);
-                    } while (!msg.contains(NetworkConstants.CALI_FIN));
-                }
                 // remove it from commands ArrayList
                 commands.remove(0);
             }
 
+            //splitting of commands
             String cmd = getFastTaskCmd(commands);
             LOGGER.info("Checking FPCmdString: " + cmd);
 
@@ -1691,14 +1692,14 @@ public class SimulatorNew extends Application {
             case UP:
                 break;
             case DOWN:
-                robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+//                robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 netMgr.send("G", "Ex");
                 break;
             case RIGHT:
-
                 break;
             case LEFT:
+                robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
                 robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
                 netMgr.send("H", "Ex");
                 break;

@@ -664,15 +664,15 @@ public class Exploration {
             robot.sense(currentMap, realMap);
             calibrate();
             movement.add(RoboCmd.RIGHT_TURN);
-
-
             moveForward();
         }
         else if (movable(robot.getDir()))
         {
             robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
             robot.sense(currentMap, realMap);
-            calibrate();
+            //sean tries lesser calibrate
+            if (robot.getMoveCounter() % 5 == 0)
+                calibrate();
             movement.add(RoboCmd.FORWARD);
             robot.setMoveCounter(robot.getMoveCounter()+1);
 
