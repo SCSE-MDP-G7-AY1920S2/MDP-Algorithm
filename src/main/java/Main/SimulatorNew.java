@@ -1166,7 +1166,8 @@ public class SimulatorNew extends Application {
                 LOGGER.info("Receiving command to start exploration: " + msg);
                 displayTimer.start();
                 // initial sensing
-                netMgr.send(robot.getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
+                // TEST
+//                netMgr.send(robot.getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
                 robot.sense(exploredMap, map);
             } // end of if
         }

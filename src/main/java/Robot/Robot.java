@@ -1,26 +1,17 @@
 package Robot;
 
-import Map.Map;
-import Map.MapDirections;
-import Map.MapDescriptor;
-import Map.MapConstants;
-import Map.MapGrid;
-import Map.MapObjectSurface;
-
-import java.awt.Point;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
-import Network.NetworkManager;
+import Map.*;
 import Network.NetworkConstants;
+import Network.NetworkManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class Robot {
 
@@ -290,6 +281,12 @@ public class Robot {
         if (!simulation && !fastestPath) {
             String cmdStr = getArduinoCommand(cmd, steps);
             netMgr.send(cmdStr, NetworkConstants.EXPLORATION);
+            // CHANGES HERE
+            String msg;
+            do {
+                msg = netMgr.receive();
+                LOGGER.info(msg);
+            } while (!msg.contains(NetworkConstants.CALI_FIN));
         }
 
         int rowInc = 0, colInc = 0;
@@ -366,6 +363,11 @@ public class Robot {
         if (!simulation && !fastestPath) {
             String cmdStr = getArduinoCommand(cmd, 1);
             netMgr.send(cmdStr, NetworkConstants.EXPLORATION);
+            String msg;
+            do {
+                msg = netMgr.receive();
+                LOGGER.info(msg);
+            } while (!msg.contains(NetworkConstants.CALI_FIN));
         }
 
         switch (cmd) {
