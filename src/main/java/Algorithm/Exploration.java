@@ -2,26 +2,20 @@ package Algorithm;
 
 //Map
 import Map.Map;
+import Map.MapConstants;
 import Map.MapDirections;
 import Map.MapGrid;
-import Map.MapConstants;
-
-//Network
-import Network.NetworkManager;
 import Network.NetworkConstants;
-
-//Robot
-import Robot.Robot;
+import Network.NetworkManager;
 import Robot.RoboCmd;
-import Robot.RobotConstants;
-import Robot.RobotSensors;
+import Robot.Robot;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+//Network
+//Robot
 
 public class Exploration {
 
@@ -671,8 +665,8 @@ public class Exploration {
             robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
             robot.sense(currentMap, realMap);
             //sean tries lesser calibrate
-            if (robot.getMoveCounter() % 5 == 0)
-                calibrate();
+            //if (robot.getMoveCounter() % 5 == 0)
+            calibrate();
             movement.add(RoboCmd.FORWARD);
             robot.setMoveCounter(robot.getMoveCounter()+1);
 

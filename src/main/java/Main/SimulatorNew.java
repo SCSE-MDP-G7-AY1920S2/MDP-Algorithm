@@ -3,18 +3,18 @@ package Main;
 import Algorithm.Exploration;
 import Algorithm.FastestPath;
 import Algorithm.ImageRecognition;
-import Map.MapGrid;
+import Helper.DisplayTimer;
+import Helper.FileManager;
 import Map.*;
-import Network.NetworkManager;
 import Network.NetworkConstants;
+import Network.NetworkManager;
 import Robot.RoboCmd;
 import Robot.Robot;
 import Robot.RobotConstants;
 import Robot.RobotSensors;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,32 +29,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.*;
-import javafx.animation.AnimationTimer;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-import javafx.scene.control.ScrollPane;
-import javafx.scene.shape.Rectangle;
-
-import static java.lang.Math.abs;
-
-import Helper.*;
 //import javafx.util.Callback;
 //import org.json.JSONArray;
 //import org.json.JSONObject;
@@ -1389,26 +1377,26 @@ public class SimulatorNew extends Application {
             // TODO: check to send one single command or one by one
             ArrayList<RoboCmd> commands = fp.getPathCommands(path);
 
-            if (!sim) {
-                // send separate msg to arduino as findingFP == true, no command is sent to arduino
-                String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
-                netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
-                netMgr.receive();   // to flush out sensor reading
-                //                   statusReceived.setText(netMgr.receive() + "\n");
-
-                netMgr.send("Q", "Ex");
-                String msg;
-                do {
-                    msg = netMgr.receive();
-                    LOGGER.info(msg);
-                } while (!msg.contains(NetworkConstants.CALI_FIN));
-            }
-
             // execute the first command if it is turning
             RoboCmd firstCmd = commands.get(0);
-            if (firstCmd == RoboCmd.LEFT_TURN) {
+            if (firstCmd == RoboCmd.RIGHT_TURN) {
                 robot.turn(firstCmd, RobotConstants.STEP_PER_SECOND);
+//                System.out.println("init first turn = " + firstCmd);
                 // remove it from commands ArrayList
+                if (!sim) {
+                    // send separate msg to arduino as findingFP == true, no command is sent to arduino
+                    String turnRigntCmdStr = robot.getArduinoCommand(RoboCmd.RIGHT_TURN, 1);
+                    netMgr.send(turnRigntCmdStr, NetworkConstants.FASTEST_PATH);
+                    netMgr.receive();   // to flush out sensor reading
+                    //                   statusReceived.setText(netMgr.receive() + "\n");
+
+//                    netMgr.send("Q", "Ex");
+//                    String msg;
+//                    do {
+//                        msg = netMgr.receive();
+//                        LOGGER.info(msg);
+//                    } while (!msg.contains(NetworkConstants.CALI_FIN));
+                }
                 commands.remove(0);
             }
 
@@ -1463,6 +1451,7 @@ public class SimulatorNew extends Application {
             if(!sim){
 
                 netMgr.send(cmdPart1, NetworkConstants.FASTEST_PATH);
+                Thread.sleep(1000);
                 netMgr.send(cmdPart2, NetworkConstants.FASTEST_PATH);
             }
 
@@ -1688,20 +1677,31 @@ public class SimulatorNew extends Application {
 
         MapDirections dir = robot.getDir();
         robot.setSimulation(true);
+        String msg;
         switch(dir){
             case UP:
                 break;
             case DOWN:
-//                robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+                robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
                 netMgr.send("G", "Ex");
+
+                do {
+                    msg = netMgr.receive();
+                    LOGGER.info(msg);
+                } while (!msg.contains(NetworkConstants.CALI_FIN));
                 break;
             case RIGHT:
                 break;
             case LEFT:
-                robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
+//                robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
                 robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
                 netMgr.send("H", "Ex");
+
+                do {
+                    msg = netMgr.receive();
+                    LOGGER.info(msg);
+                } while (!msg.contains(NetworkConstants.CALI_FIN));
                 break;
         }
         robot.setSimulation(false);
