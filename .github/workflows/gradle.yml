@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Generate JAR File for Algo
+    name: Generate JAR File for Algo JDK 8
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -29,12 +29,14 @@ jobs:
       run: ./gradlew jar
     - name: Prepare JAR and Default Map for zipping
       run: cp ./build/libs/*.jar . && mkdir algoProgram && mv *.jar ./algoProgram && mv defaultMap.txt ./algoProgram && mv ./scripts/* ./algoProgram
+    - name: List files
+      run: ls -lsh ./algoProgram
     - uses: actions/upload-artifact@v1
       with:
         name: algo-jar-jdk8
         path: algoProgram
   build11:
-    name: Generate JAR File for Algo
+    name: Generate JAR File for Algo JDK 11
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -52,6 +54,8 @@ jobs:
         run: ./gradlew jar
       - name: Prepare JAR and Default Map for zipping
         run: cp ./build/libs/*.jar . && mkdir algoProgram && mv *.jar ./algoProgram && mv defaultMap.txt ./algoProgram && mv ./scripts/* ./algoProgram
+      - name: List files
+        run: ls -lsh ./algoProgram
       - uses: actions/upload-artifact@v1
         with:
           name: algo-jar-jdk11
