@@ -1130,6 +1130,57 @@ public class Robot {
         return false;
     }
 
+    public boolean isBlockOnFront(Map currentMap) {
+        Point F1_pos = sensorMap.get("F1").getPos();
+        Point F2_pos = sensorMap.get("F2").getPos();
+        Point F3_pos = sensorMap.get("F3").getPos();
+
+        MapGrid F1, F2, F3;
+
+        int F1Y = F1_pos.y;
+        int F2Y = F2_pos.y;
+        int F3Y = F3_pos.y;
+
+        int F1X = F1_pos.x;
+        int F2X = F2_pos.x;
+        int F3X = F3_pos.x;
+
+        switch (dir) {
+            case UP:
+                F1Y += 1;
+                F2Y += 1;
+                F3Y += 1;
+                break;
+            case DOWN:
+                F1Y -= 1;
+                F2Y -= 1;
+                F3Y -= 1;
+                break;
+            case LEFT:
+                F1X -= 1;
+                F2X -= 1;
+                F3X -= 1;
+                break;
+            case RIGHT:
+                F1X += 1;
+                F2X += 1;
+                F3X += 1;
+                break;
+        }
+
+        if (currentMap.checkValidGrid(F1Y, F1X) && currentMap.checkValidGrid(F2Y, F2X) && currentMap.checkValidGrid(F3Y, F3X)) {
+            F1 = currentMap.getGrid(F1Y, F1X);
+            F2 = currentMap.getGrid(F2Y, F2X);
+            F3 = currentMap.getGrid(F3Y, F3X);
+            if (F1.isObstacles() && F2.isObstacles() && F3.isObstacles()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     public boolean isObjOnRight(Map currentMap) {
         if (isWallOnRight())
             return true;

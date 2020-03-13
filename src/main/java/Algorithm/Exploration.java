@@ -262,7 +262,7 @@ public class Exploration {
         )) {
             robot.turn(RoboCmd.RIGHT_TURN, 1);
             robot.sense(currentMap, realMap);
-            align("F");
+            calibrate();
             robot.turn(RoboCmd.LEFT_TURN, 1);
             robot.sense(currentMap, realMap);
             robot.setMoveCounter(0);
@@ -270,16 +270,16 @@ public class Exploration {
 
         if (robot.getMoveCounter() >= 15){
             if (robot.isObjOnFront(currentMap)) {
-                align("F");
+                calibrate();
                 robot.setMoveCounter(0);
             }
             if (robot.isObjOnRight(currentMap)) {
                 robot.turn(RoboCmd.RIGHT_TURN, 1);
                 robot.sense(currentMap, realMap);
-                align("F");
+                calibrate();
                 robot.turn(RoboCmd.LEFT_TURN, 1);
                 robot.sense(currentMap, realMap);
-                align("R");
+                calibrate();
                 robot.setMoveCounter(0);
             }
         }
@@ -720,8 +720,11 @@ public class Exploration {
     }
 
     public void calibrate(){
-        if (robot.isObjOnFront(currentMap))
+        if (robot.isWallOnFront()){
             align("F");
+        } else if (robot.isBlockOnFront(currentMap)){
+            align("f");
+        }
         if (robot.isObjOnRight(currentMap))
             align("R");
     }
