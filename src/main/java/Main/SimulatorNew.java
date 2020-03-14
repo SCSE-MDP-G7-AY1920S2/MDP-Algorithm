@@ -41,6 +41,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 //import javafx.util.Callback;
@@ -777,19 +778,19 @@ public class SimulatorNew extends Application {
                 switch (e.getCode()) {
                     case W:
                         robot.move(RoboCmd.FORWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map);
+                        robot.sense(exploredMap, map, Optional.empty());
                         break;
                     case S:
                         robot.move(RoboCmd.BACKWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map);
+                        robot.sense(exploredMap, map, Optional.empty());
                         break;
                     case A:
                         robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map);
+                        robot.sense(exploredMap, map, Optional.empty());
                         break;
                     case D:
                         robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map);
+                        robot.sense(exploredMap, map, Optional.empty());
                         break;
                     case I:
 //                            NetMgr.getInstance().send("I");
@@ -1124,7 +1125,7 @@ public class SimulatorNew extends Application {
             // reset to empty map
             exploredMap.resetMap();
             robot.setStartPos(startPos.y, startPos.x, exploredMap);
-            robot.sense(exploredMap, map);
+            robot.sense(exploredMap, map, Optional.empty());
         } else {
             expMapDraw = true;
             robot.setSimulation(false);
@@ -1168,7 +1169,7 @@ public class SimulatorNew extends Application {
                 // initial sensing
                 // TEST
 //                netMgr.send(robot.getArduinoCommand(RoboCmd.SEND_SENSORS, 0), NetworkConstants.EXPLORATION);
-                robot.sense(exploredMap, map);
+                robot.sense(exploredMap, map, Optional.empty());
             } // end of if
         }
     }

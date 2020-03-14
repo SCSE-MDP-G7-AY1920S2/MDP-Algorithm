@@ -12,6 +12,7 @@ import Robot.Robot;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 //Network
@@ -257,14 +258,16 @@ public class Exploration {
         int tmpx = robot.getCurLocation().x;
         int tmpy = robot.getCurLocation().y;
 
+        Optional<String> sensorString;
+
         if (robot.isObjOnFront(currentMap) && robot.isObjOnRight(currentMap) && (
                 (tmpx == 1 && tmpy == 1) || (tmpx == 13 && tmpy == 1) ||(tmpx == 1 && tmpy == 18) || (tmpx == 13 && tmpy == 18)
         )) {
-            robot.turn(RoboCmd.RIGHT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.RIGHT_TURN, 1);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
-            robot.turn(RoboCmd.LEFT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, 1);
+            robot.sense(currentMap, realMap, sensorString);
             robot.setMoveCounter(0);
         }
 
@@ -274,11 +277,11 @@ public class Exploration {
                 robot.setMoveCounter(0);
             }
             if (robot.isObjOnRight(currentMap)) {
-                robot.turn(RoboCmd.RIGHT_TURN, 1);
-                robot.sense(currentMap, realMap);
+                sensorString = robot.turn(RoboCmd.RIGHT_TURN, 1);
+                robot.sense(currentMap, realMap, sensorString);
                 calibrate();
-                robot.turn(RoboCmd.LEFT_TURN, 1);
-                robot.sense(currentMap, realMap);
+                sensorString = robot.turn(RoboCmd.LEFT_TURN, 1);
+                robot.sense(currentMap, realMap, sensorString);
                 calibrate();
                 robot.setMoveCounter(0);
             }
@@ -369,21 +372,21 @@ public class Exploration {
 
     public void turn(MapDirections prevDir) throws InterruptedException {
         MapDirections robotDir = robot.getDir();
-
+        Optional<String> sensorString = Optional.empty();
         if (prevDir.equals(robotDir))
             return;
 
         if (MapDirections.getClockwise(robotDir).equals(prevDir)) {
-            robot.turn(RoboCmd.RIGHT_TURN, 1);
+            sensorString = robot.turn(RoboCmd.RIGHT_TURN, 1);
         } else if (MapDirections.getAntiClockwise(robotDir).equals(prevDir)) {
-            robot.turn(RoboCmd.LEFT_TURN, 1);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, 1);
         } else if (MapDirections.getOpposite(robotDir).equals(prevDir)) {
-            robot.turn(RoboCmd.LEFT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, 1);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
-            robot.turn(RoboCmd.LEFT_TURN, 1);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, 1);
         }
-        robot.sense(currentMap, realMap);
+        robot.sense(currentMap, realMap, sensorString);
         calibrate();
     }
 
@@ -652,18 +655,19 @@ public class Exploration {
     }
 
     public void rightWallHug() throws InterruptedException{
+        Optional<String> sensorString;
         if (movable(MapDirections.getClockwise(robot.getDir())))
         {
-            robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.RIGHT_TURN);
             moveForward();
         }
         else if (movable(robot.getDir()))
         {
-            robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             //sean tries lesser calibrate
             //if (robot.getMoveCounter() % 5 == 0)
             calibrate();
@@ -677,21 +681,21 @@ public class Exploration {
         }
         else if (movable(MapDirections.getAntiClockwise(robot.getDir())))
         {
-            robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
 
             movement.add(RoboCmd.LEFT_TURN);
 
         } else
         {
-            robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
 
-            robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
         }
@@ -700,9 +704,10 @@ public class Exploration {
     }
 
     public void moveForward() throws InterruptedException {
+        Optional<String> sensorString;
         if (movable(robot.getDir())) {
-            robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.FORWARD);
             robot.setMoveCounter(robot.getMoveCounter()+1);
@@ -712,8 +717,8 @@ public class Exploration {
                 backToStartTimes += 1;
             }
         } else {
-            robot.turn(RoboCmd.LEFT_TURN,1);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN,1);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
         }
@@ -752,23 +757,23 @@ public class Exploration {
 
         for (int i = 0; i < cmd.length(); i++) {
             char c = cmd.charAt(i);
-
+            Optional<String> sensorString;
             switch (c) {
                 case 'W':
-                    robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
                 case 'S':
-                    robot.move(RoboCmd.BACKWARD, 1, currentMap, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.move(RoboCmd.BACKWARD, 1, currentMap, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
                 case 'A':
-                    robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
                 case 'D':
-                    robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
             }
             calibrate();
