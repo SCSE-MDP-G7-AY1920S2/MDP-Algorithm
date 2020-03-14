@@ -622,7 +622,7 @@ public class Robot {
     public void sense(Map exploredMap, Map realMap, Optional<String> sensorString) {
 
         HashMap<String, Integer> sensorResult = sensorString.map(this::updateSensorResult)
-                .orElse(updateAllSensorResult(realMap));
+                .orElseGet(() -> updateAllSensorResult(realMap));
         updateMap(exploredMap, realMap, sensorResult);
 
         if (!simulation && !fastestPath) {
