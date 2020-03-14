@@ -1,0 +1,62 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Generate JAR File for Algo JDK 8
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Using JDK 8 gradle
+      run: mv build-1.8.gradle build.gradle
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Package JAR File
+      run: ./gradlew jar
+    - name: Prepare JAR and Default Map for zipping
+      run: cp ./build/libs/*.jar . && mkdir algoProgram && mv *.jar ./algoProgram && mv defaultMap.txt ./algoProgram && mv ./scripts/* ./algoProgram
+    - name: List files
+      run: ls -lsh ./algoProgram
+    - uses: actions/upload-artifact@v1
+      with:
+        name: algo-jar-jdk8
+        path: algoProgram
+  build11:
+    name: Generate JAR File for Algo JDK 11
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Using JDK 11 gradle
+        run: mv build-1.11.gradle build.gradle
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Package JAR File
+        run: ./gradlew jar
+      - name: Prepare JAR and Default Map for zipping
+        run: cp ./build/libs/*.jar . && mkdir algoProgram && mv *.jar ./algoProgram && mv defaultMap.txt ./algoProgram && mv ./scripts/* ./algoProgram
+      - name: List files
+        run: ls -lsh ./algoProgram
+      - uses: actions/upload-artifact@v1
+        with:
+          name: algo-jar-jdk11
+          path: algoProgram
