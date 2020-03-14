@@ -18,6 +18,7 @@ public class NetworkConstants {
 
     public static final String FASTEST_PATH = "fpath";
     public static final String CALI_FIN = "Finish Calibrate";
+    public static final String MOVE_FIN = "Finish Move";
     public static final String CALI_FP = "calibrated for FP";
 
     public static final String IMAGE_KEY = "imgRaw";

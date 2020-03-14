@@ -15,7 +15,6 @@ import Network.NetworkConstants;
 import Robot.Robot;
 import Robot.RoboCmd;
 import Robot.RobotConstants;
-import Robot.RobotSensors;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -23,6 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class ImageRecognition {
@@ -241,10 +241,10 @@ public class ImageRecognition {
                 (tmpx == 1 && tmpy == 1) || (tmpx == 13 && tmpy == 1) ||(tmpx == 1 && tmpy == 18) || (tmpx == 13 && tmpy == 18)
         )) {
             robot.turn(RoboCmd.RIGHT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             align("F");
             robot.turn(RoboCmd.LEFT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             robot.setMoveCounter(0);
         }
 
@@ -255,10 +255,10 @@ public class ImageRecognition {
             }
             if (robot.isObjOnRight(currentMap)) {
                 robot.turn(RoboCmd.RIGHT_TURN, 1);
-                robot.sense(currentMap, realMap);
+                robot.sense(currentMap, realMap, Optional.empty());
                 align("F");
                 robot.turn(RoboCmd.LEFT_TURN, 1);
-                robot.sense(currentMap, realMap);
+                robot.sense(currentMap, realMap, Optional.empty());
                 align("R");
                 robot.setMoveCounter(0);
             }
@@ -288,11 +288,11 @@ public class ImageRecognition {
 
         } else if (MapDirections.getOpposite(robotDir).equals(prevDir)) {
             robot.turn(RoboCmd.LEFT_TURN, 1);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             robot.turn(RoboCmd.LEFT_TURN, 1);
         }
-        robot.sense(currentMap, realMap);
+        robot.sense(currentMap, realMap, Optional.empty());
         calibrate();
     }
 
@@ -322,7 +322,7 @@ public class ImageRecognition {
         if (movable(MapDirections.getClockwise(robot.getDir())))
         {
             robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             movement.add(RoboCmd.RIGHT_TURN);
 
@@ -334,7 +334,7 @@ public class ImageRecognition {
         else if (movable(robot.getDir()))
         {
             robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             movement.add(RoboCmd.FORWARD);
             robot.setMoveCounter(robot.getMoveCounter()+1);
@@ -348,7 +348,7 @@ public class ImageRecognition {
         else if (movable(MapDirections.getAntiClockwise(robot.getDir())))
         {
             robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
 
@@ -358,7 +358,7 @@ public class ImageRecognition {
         } else
         {
             robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
 
@@ -366,7 +366,7 @@ public class ImageRecognition {
                 takeImage();
 
             robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
 
@@ -378,9 +378,10 @@ public class ImageRecognition {
 
     public void moveForward(boolean takingImage) throws InterruptedException {
 //        String msg;
+        Optional<String> sensorString;
         if (movable(robot.getDir())) {
-            robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.FORWARD);
             robot.setMoveCounter(robot.getMoveCounter()+1);
@@ -391,8 +392,8 @@ public class ImageRecognition {
             if (robot.getCurLocation().x == 1 && robot.getCurLocation().y == 1)
                 backToStart = true;
         } else {
-            robot.turn(RoboCmd.LEFT_TURN,1);
-            robot.sense(currentMap, realMap);
+            sensorString = robot.turn(RoboCmd.LEFT_TURN,1);
+            robot.sense(currentMap, realMap, sensorString);
             calibrate();
             movement.add(RoboCmd.LEFT_TURN);
             if(takingImage)
@@ -683,27 +684,27 @@ public class ImageRecognition {
 
         for (int i = 0; i < cmd.length(); i++) {
             char c = cmd.charAt(i);
-
+            Optional<String> sensorString;
             switch (c) {
                 case 'W':
                     if (movable(robot.getDir())) {
-                        robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
-                        robot.sense(currentMap, realMap);
+                        sensorString = robot.move(RoboCmd.FORWARD, 1, currentMap, stepsPerSecond);
+                        robot.sense(currentMap, realMap, sensorString);
                     }
                     break;
                 case 'S':
                     if (movable(MapDirections.getOpposite(robot.getDir()))) {
-                        robot.move(RoboCmd.BACKWARD, 1, currentMap, stepsPerSecond);
-                        robot.sense(currentMap, realMap);
+                        sensorString = robot.move(RoboCmd.BACKWARD, 1, currentMap, stepsPerSecond);
+                        robot.sense(currentMap, realMap, sensorString);
                     }
                     break;
                 case 'A':
-                    robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.turn(RoboCmd.LEFT_TURN, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
                 case 'D':
-                    robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
-                    robot.sense(currentMap, realMap);
+                    sensorString = robot.turn(RoboCmd.RIGHT_TURN, stepsPerSecond);
+                    robot.sense(currentMap, realMap, sensorString);
                     break;
             }
 
@@ -748,11 +749,11 @@ public class ImageRecognition {
                     goToPointForImage(loc, obsSurface);
                 if (c == RoboCmd.LEFT_TURN || c == RoboCmd.RIGHT_TURN) {
                     robot.turn(c, stepPerSecond);
-                    robot.sense(currentMap, realMap);
+                    robot.sense(currentMap, realMap, Optional.empty());
                     calibrate();
                 } else {
                     robot.move(c, RobotConstants.MOVE_STEPS, currentMap, stepPerSecond);
-                    robot.sense(currentMap, realMap);
+                    robot.sense(currentMap, realMap, Optional.empty());
                     calibrate();
                 }
 
@@ -774,14 +775,14 @@ public class ImageRecognition {
             return true;
         } else if (desiredDir == MapDirections.getClockwise(robot.getDir())) {
             robot.turn(RoboCmd.RIGHT_TURN, stepPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
             if (!simulation) {
                 surfTaken = imageRecognitionRight(currentMap);
             }
             robot.updateNotYetTaken(surfTaken);
         } else if (desiredDir == MapDirections.getAntiClockwise(robot.getDir())) {
             robot.turn(RoboCmd.LEFT_TURN, stepPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
 
             if (!simulation) {
                 surfTaken = imageRecognitionRight(currentMap);
@@ -791,14 +792,14 @@ public class ImageRecognition {
         // opposite
         else {
             robot.turn(RoboCmd.LEFT_TURN, stepPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
 
             if (!simulation) {
                 surfTaken = imageRecognitionRight(currentMap);
             }
             robot.updateNotYetTaken(surfTaken);
             robot.turn(RoboCmd.LEFT_TURN, stepPerSecond);
-            robot.sense(currentMap, realMap);
+            robot.sense(currentMap, realMap, Optional.empty());
 
             if (!simulation) {
                 surfTaken = imageRecognitionRight(currentMap);

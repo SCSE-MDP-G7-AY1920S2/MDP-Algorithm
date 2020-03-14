@@ -10,6 +10,7 @@ import java.awt.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +54,7 @@ public class RequestHandler extends Thread {
         MDF.loadRealMap(realMap, "defaultMap.txt");
         robot = new Robot(true, false, 1, 1, MapDirections.RIGHT);
         robot.setStartPos(1, 13, exploredMap);
-        robot.sense(exploredMap, realMap);
+        robot.sense(exploredMap, realMap, Optional.empty());
         System.out.println(exploredMap.getPercentageExplored());
         System.out.println(realMap.getPercentageExplored());
 //        System.out.println(realMap.getCell(8, 7));
@@ -182,7 +183,7 @@ public class RequestHandler extends Thread {
                 LOGGER.warning("Wrong char, do nothing");
                 break;
         }
-        robot.sense(exploredMap, realMap);
+        robot.sense(exploredMap, realMap, Optional.empty());
     }
 
     public void sendSensorRes() {

@@ -10,6 +10,7 @@ import org.json.JSONTokener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -269,15 +270,15 @@ public class Robot {
 
     /**
      * Robot movement with direction (forward, backward) and steps) and Map updated.
-     *
-     * @param cmd         FORWARD or BACKWARD
+     *  @param cmd         FORWARD or BACKWARD
      * @param steps       number of steps moved by the robot
      * @param currentMap current explored environment of the robot
+     * @return Optional raw sensor data.
      */
-    public void move(RoboCmd cmd, int steps, Map currentMap, int stepsPerSecond) throws InterruptedException {
+    public Optional<String> move(RoboCmd cmd, int steps, Map currentMap, int stepsPerSecond) throws InterruptedException {
 
         tempStartTime = System.currentTimeMillis();
-
+        Optional<String> sensorString = Optional.empty();
         if (!simulation && !fastestPath) {
             String cmdStr = getArduinoCommand(cmd, steps);
             netMgr.send(cmdStr, NetworkConstants.EXPLORATION);
@@ -286,7 +287,8 @@ public class Robot {
             do {
                 msg = netMgr.receive();
                 LOGGER.info(msg);
-            } while (!msg.contains(NetworkConstants.CALI_FIN));
+            } while (!msg.contains(NetworkConstants.MOVE_FIN));
+            sensorString = Optional.of(msg);
         }
 
         int rowInc = 0, colInc = 0;
@@ -320,7 +322,7 @@ public class Robot {
             default:
                 status = String.format("Invalid command: %s! No movement executed.\n", cmd.toString());
                 LOGGER.warning(status);
-                return;
+                return Optional.empty();
         }
 
         preMove = cmd;
@@ -350,16 +352,18 @@ public class Robot {
                 }
             }
         }
+        return sensorString;
     }
 
     /**
      * Rotate Robot(LEFT_TURN, RIGHT_TURN)
      * @param cmd the command to turn the robot left or right
+     * @return Optional raw sensor data.
      */
-    public void turn(RoboCmd cmd, int stepsPerSecond) throws InterruptedException {
+    public Optional<String> turn(RoboCmd cmd, int stepsPerSecond) throws InterruptedException {
 
         tempStartTime = System.currentTimeMillis();
-
+        Optional<String> sensorString = Optional.empty();
         if (!simulation && !fastestPath) {
             String cmdStr = getArduinoCommand(cmd, 1);
             netMgr.send(cmdStr, NetworkConstants.EXPLORATION);
@@ -367,7 +371,8 @@ public class Robot {
             do {
                 msg = netMgr.receive();
                 LOGGER.info(msg);
-            } while (!msg.contains(NetworkConstants.CALI_FIN));
+            } while (!msg.contains(NetworkConstants.MOVE_FIN));
+            sensorString = Optional.of(msg);
         }
 
         switch (cmd) {
@@ -402,6 +407,7 @@ public class Robot {
                 TimeUnit.MILLISECONDS.sleep(tempDiff);
             }
         }
+        return sensorString;
     }
 
     /**
@@ -609,12 +615,14 @@ public class Robot {
 
     /**
      * Robot sensing surrounding obstacles for simulator
-     *
-     * @param exploredMap the current Map which is being explored
+     *  @param exploredMap the current Map which is being explored
      * @param realMap the actual Map
+     * @param sensorString Optional JSON string containing sensor data
      */
-    public void sense(Map exploredMap, Map realMap) {
-        HashMap<String, Integer> sensorResult = updateAllSensorResult(realMap);
+    public void sense(Map exploredMap, Map realMap, Optional<String> sensorString) {
+
+        HashMap<String, Integer> sensorResult = sensorString.map(this::updateSensorResult)
+                .orElseGet(() -> updateAllSensorResult(realMap));
         updateMap(exploredMap, realMap, sensorResult);
 
         if (!simulation && !fastestPath) {
