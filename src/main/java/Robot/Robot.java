@@ -816,14 +816,14 @@ public class Robot {
 
     public HashMap<String, MapObjectSurface> getUntakenSurfaces(Map currentMap) {
         HashMap<String, MapObjectSurface> notYetTaken = getAllPossibleSurfaces(currentMap);
-
-        for (String takenSurface : surfTakenMap.keySet()) {
+        System.out.println(notYetTaken);
+        for (String takenSurface : surfTakenMap.keySet())
             if (notYetTaken.containsKey(takenSurface)) {
                 notYetTaken.remove(takenSurface);
             } else {
+                System.out.println("impossible surface = " + surfTakenMap.get(takenSurface));
                 LOGGER.warning("Surface taken not in all possible surfaces. Please check. \n");
             }
-        }
 
         return notYetTaken;
     }
@@ -861,6 +861,7 @@ public class Robot {
             tempSensorRow = getSensorMap().get(sensorName).getRow();
             tempSensorCol = getSensorMap().get(sensorName).getCol();
             MapObjectSurface tempObsSurface = internalAddToSurfaceTaken(tempSensorRow, tempSensorCol, rowInc, colInc, tempSensorReading);
+            System.out.println("add to surface taken");
             return tempObsSurface;
         } else {
             return null;
@@ -882,6 +883,7 @@ public class Robot {
 
         tempObsSurface = new MapObjectSurface(tempObsRow, tempObsCol, tempSurface);
         surfTakenMap.put(tempObsSurface.toString(), tempObsSurface);
+        System.out.println(tempObsSurface.toString());
 
         return tempObsSurface;
     }
@@ -907,7 +909,7 @@ public class Robot {
                 tempCell = currentMap.getGrid(row, col);
 
                 if (tempCell.isObstacles()) {
-                    tempNeighbours = currentMap.getNeighboursMap(tempCell);
+                    tempNeighbours = currentMap.getNeighboursMap(tempCell, currentMap);
 
                     for (MapDirections neighbourDir : tempNeighbours.keySet()) {
                         temp = tempNeighbours.get(neighbourDir);
