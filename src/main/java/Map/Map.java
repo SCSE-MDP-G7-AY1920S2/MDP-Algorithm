@@ -354,7 +354,7 @@ public class Map {
      * @param g Grid of current position
      * @return neighbours HashMap<Direction, Grid>
      */
-    public HashMap<MapDirections, MapGrid> getNeighboursMap(MapGrid g) {
+    public HashMap<MapDirections, MapGrid> getNeighboursMap(MapGrid g, Map currentMap) {
 
         HashMap<MapDirections, MapGrid> neighbours = new HashMap<MapDirections, MapGrid>();
         Point up = new Point(g.getPos().x , g.getPos().y + 1);
@@ -362,24 +362,87 @@ public class Map {
         Point left = new Point(g.getPos().x - 1 , g.getPos().y );
         Point right = new Point(g.getPos().x + 1 , g.getPos().y );
 
+        //logic error
         // UP
         if (checkValidGrid(up.y, up.x)){
-            neighbours.put(MapDirections.UP, getGrid(up));
+            //sean; check if robot can enter neighbor surface
+            //for up
+            for(int i=-1; i<2;i++){
+                for(int j=0; j<3; j++){
+                    if (!checkValidGrid(up.y + j, up.x + i) || currentMap.getGrid(up.y+j, up.x+i).isObstacles() ){
+                        i=1000;
+                        j=1000;
+                        break;
+                    }
+                    if(i==1 && j==2){
+//                        System.out.println("UP:" + getGrid(up));
+                        neighbours.put(MapDirections.UP, getGrid(up));
+                    }
+                }
+            }
+//            neighbours.put(MapDirections.UP, getGrid(up));
         }
 
         // DOWN
         if (checkValidGrid(down.y, down.x)) {
-            neighbours.put(MapDirections.DOWN, getGrid(down));
+            //sean; check if robot can enter neighbor surface
+            //for down
+            for(int i=-1; i<2;i++){
+                for(int j=0; j>-3; j--){
+                    if (!checkValidGrid(down.y + j, down.x + i) || currentMap.getGrid(down.y+j, down.x+i).isObstacles() ){
+                        i=1000;
+                        j=-1000;
+                        break;
+                    }
+                    if(i==1 && j ==-2) {
+//                        System.out.println("DOWN:" + getGrid(down));
+                        neighbours.put(MapDirections.DOWN, getGrid(down));
+                    }
+                }
+            }
+//            neighbours.put(MapDirections.DOWN, getGrid(down));
         }
 
         // LEFT
         if (checkValidGrid(left.y, left.x)){
-            neighbours.put(MapDirections.LEFT, getGrid(left));
+            //sean; check if robot can enter neighbor surface
+            //for left
+            for(int i=0; i>-3;i--){
+                for(int j=-1; j<2; j++){
+                    if (!checkValidGrid(left.y + j, left.x + i) || currentMap.getGrid(left.y+j, left.x+i).isObstacles() ){
+                        i=-1000;
+                        j=1000;
+                        break;
+                    }
+                    if(i==-2 && j==1) {
+//                        System.out.println("LEFT:" + getGrid(left));
+                        neighbours.put(MapDirections.LEFT, getGrid(left));
+                    }
+                }
+            }
+//            neighbours.put(MapDirections.LEFT, getGrid(left));
         }
 
         // RIGHT
         if (checkValidGrid(left.y, right.x)){
-            neighbours.put(MapDirections.RIGHT, getGrid(right));
+            //sean; check if robot can enter neighbor surface
+            //for right
+            for(int i=0; i<3;i++){
+                for(int j=-1; j<2; j++){
+                    if (!checkValidGrid(right.y + j, right.x + i) || currentMap.getGrid(right.y + j
+                            , right.x+i).isObstacles() ){
+                        i=1000;
+                        j=1000;
+                        break;
+                    }
+                    //last
+                    if(i==2 && j==1) {
+//                        System.out.println("RIGHT:" + getGrid(right));
+                        neighbours.put(MapDirections.RIGHT, getGrid(right));
+                    }
+                }
+            }
+//            neighbours.put(MapDirections.RIGHT, getGrid(right));
         }
 
         return neighbours;
@@ -490,6 +553,7 @@ public class Map {
 
 
     public MapGrid nearestMovable(MapObjectSurface obsSurface) {
+
         double distance = 1000, tempDist;
         MapGrid nearest = null;
         MapGrid tempGrid;
