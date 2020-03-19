@@ -239,6 +239,7 @@ public class Exploration {
         if (stuckInLoop()) {
             goToPoint(new Point(prevLocX, prevLocY));
             turn(prevDir);
+
             movement.clear();
         }
     }
@@ -271,6 +272,7 @@ public class Exploration {
             robot.setMoveCounter(0);
         }
 
+        // TODO (Sean) change counter value for increase calibration accuracy
         if (robot.getMoveCounter() >= 15){
             if (robot.isObjOnFront(currentMap)) {
                 calibrate();
@@ -361,7 +363,7 @@ public class Exploration {
 //    }
 
     public boolean stuckInLoop(){
-        if (movement.size() >= 4)
+        if (movement.size() >= 10)
             if (movement.get(movement.size() - 1) == RoboCmd.FORWARD &&
                 movement.get(movement.size() - 2) == RoboCmd.RIGHT_TURN &&
                 movement.get(movement.size() - 3) == RoboCmd.FORWARD &&

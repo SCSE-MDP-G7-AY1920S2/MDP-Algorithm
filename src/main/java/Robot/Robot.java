@@ -883,7 +883,9 @@ public class Robot {
 
         tempObsSurface = new MapObjectSurface(tempObsRow, tempObsCol, tempSurface);
         surfTakenMap.put(tempObsSurface.toString(), tempObsSurface);
-        System.out.println(tempObsSurface.toString());
+
+        //TODO (Sean): fix
+        System.out.println("tempObsSurface = " + tempObsSurface.toString());
 
         return tempObsSurface;
     }
@@ -1061,10 +1063,11 @@ public class Robot {
         Point R1_pos = sensorMap.get("R1").getPos();
         Point R2_pos = sensorMap.get("R2").getPos();
 
-        if ((R1_pos.x == 0 && R2_pos.x == 0)
-                || (R1_pos.x == MapConstants.MAP_WIDTH - 1 && R2_pos.x == MapConstants.MAP_WIDTH - 1)
-                || (R1_pos.y == 0 && R2_pos.y == 0)
-                || (R1_pos.y == MapConstants.MAP_LENGTH - 1 && R2_pos.y == MapConstants.MAP_LENGTH - 1)) {
+        //TODO (Sean) hopefuly fix the problem
+        if ((R1_pos.x <= 0 && R2_pos.x <= 0)
+                || (R1_pos.x >= MapConstants.MAP_WIDTH - 1 && R2_pos.x >= MapConstants.MAP_WIDTH - 1)
+                || (R1_pos.y <= 0 && R2_pos.y <= 0)
+                || (R1_pos.y >= MapConstants.MAP_LENGTH - 1 && R2_pos.y >= MapConstants.MAP_LENGTH - 1)) {
             return true;
         } else {
             return false;

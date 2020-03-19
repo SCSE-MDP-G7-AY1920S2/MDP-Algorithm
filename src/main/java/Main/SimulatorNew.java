@@ -41,6 +41,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -775,22 +776,25 @@ public class SimulatorNew extends Application {
             System.out.println("System movement");
 
             try {
+
+                Optional<String> sensorString = Optional.empty();
+
                 switch (e.getCode()) {
                     case W:
-                        robot.move(RoboCmd.FORWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map, Optional.empty());
+                        sensorString = robot.move(RoboCmd.FORWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map, sensorString);
                         break;
                     case S:
-                        robot.move(RoboCmd.BACKWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map, Optional.empty());
+                        sensorString = robot.move(RoboCmd.BACKWARD, 1, exploredMap, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map, sensorString);
                         break;
                     case A:
-                        robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map, Optional.empty());
+                        sensorString = robot.turn(RoboCmd.LEFT_TURN, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map, sensorString);
                         break;
                     case D:
-                        robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
-                        robot.sense(exploredMap, map, Optional.empty());
+                        sensorString = robot.turn(RoboCmd.RIGHT_TURN, RobotConstants.STEP_PER_SECOND);
+                        robot.sense(exploredMap, map, sensorString);
                         break;
                     case I:
 //                            NetMgr.getInstance().send("I");
@@ -1634,16 +1638,21 @@ public class SimulatorNew extends Application {
             showImgBtn.setVisible(true);
             robot.setStatus("Done exploration\n");
 
+            //TODO (Sean) IMAGE END
             if (!sim) {
                 robot.send_android(exploredMap, robot.getAllImageList());
                 //get json from Rpi
 //                fileManager.jsonToImage("json msg");
             }
 
+//            fileManager.jsonToImage("", robot.getAllImageList());
+//            fileManager.generateTileImage();
+
             if(!sim){
                 netMgr.send("M", "Imageraw");
                 String msg = netMgr.receive();
-                fileManager.jsonToImage(msg);
+
+                fileManager.jsonToImage(msg, robot.getAllImageList());
                 fileManager.generateTileImage();
             }
 

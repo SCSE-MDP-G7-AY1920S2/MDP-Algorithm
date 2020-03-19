@@ -143,6 +143,7 @@ public class RequestHandler extends Thread {
     }
 
     private void execute_command(String cmd) throws InterruptedException {
+        System.out.println("EXCECUTE_COMMAND");
         char firstChar = cmd.charAt(0);
         int step = 1;
         if (cmd.length() > 1) {
@@ -183,6 +184,7 @@ public class RequestHandler extends Thread {
                 LOGGER.warning("Wrong char, do nothing");
                 break;
         }
+        //fix this
         robot.sense(exploredMap, realMap, Optional.empty());
     }
 
