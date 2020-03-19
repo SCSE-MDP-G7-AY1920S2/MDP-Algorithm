@@ -225,11 +225,12 @@ public class ImageRecognition {
                 prevDir = MapDirections.LEFT;
         }
 
-        if (stuckInLoop()) {
-            goToPoint(new Point(prevLocX, prevLocY), false);
-            turn(prevDir);
-            movement.clear();
-        }
+        //unreliable
+//        if (stuckInLoop()) {
+//            goToPoint(new Point(prevLocX, prevLocY), false);
+//            turn(prevDir);
+//            movement.clear();
+//        }
     }
 
     public void calibrate_every_x_steps() throws InterruptedException{
@@ -270,7 +271,7 @@ public class ImageRecognition {
     }
 
     public boolean stuckInLoop(){
-        if (movement.size() >= 10)
+        if (movement.size() >= 4)
             if (movement.get(movement.size() - 1) == RoboCmd.FORWARD &&
                     movement.get(movement.size() - 2) == RoboCmd.RIGHT_TURN &&
                     movement.get(movement.size() - 3) == RoboCmd.FORWARD &&

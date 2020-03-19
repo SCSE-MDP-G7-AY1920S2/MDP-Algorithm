@@ -363,7 +363,7 @@ public class Exploration {
 //    }
 
     public boolean stuckInLoop(){
-        if (movement.size() >= 10)
+        if (movement.size() >= 4)
             if (movement.get(movement.size() - 1) == RoboCmd.FORWARD &&
                 movement.get(movement.size() - 2) == RoboCmd.RIGHT_TURN &&
                 movement.get(movement.size() - 3) == RoboCmd.FORWARD &&

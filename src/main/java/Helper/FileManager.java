@@ -179,7 +179,7 @@ public class FileManager {
     public void generateTileImage() throws IOException {
         LOGGER.info("Generating tiled image...");
 
-        int width = 1000;
+        int width = 1248;
         int height = 550;
         int x = 0;
         int y = 0;
