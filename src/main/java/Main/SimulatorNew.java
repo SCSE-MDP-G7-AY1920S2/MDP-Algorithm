@@ -1331,10 +1331,25 @@ public class SimulatorNew extends Application {
                 if (tempCmd == RoboCmd.FORWARD) {
                     moves++;
                     if (i == commands.size() - 1) {
-                        cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[tempCmd.ordinal()]);
-                        cmdBuilder.append(moves);
-                        cmdBuilder.append(',');
-                        moves = 0;
+                        if(moves > 8) {
+                            int movesDivider = moves / 2;
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[tempCmd.ordinal()]);
+                            cmdBuilder.append(movesDivider);
+                            cmdBuilder.append(',');
+
+
+                            movesDivider = moves - movesDivider;
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[tempCmd.ordinal()]);
+                            cmdBuilder.append(movesDivider);
+                            cmdBuilder.append(',');
+                            moves = 0;
+                        }
+                        else{
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[tempCmd.ordinal()]);
+                            cmdBuilder.append(moves);
+                            cmdBuilder.append(',');
+                            moves = 0;
+                        }
                     }
                 } else if (tempCmd == RoboCmd.BACKWARD) {
                     moves++;
@@ -1346,9 +1361,23 @@ public class SimulatorNew extends Application {
                     }
                 } else{ // not forward
                     if (moves > 0) {    // previous forward, append the forward moves first
-                        cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[RoboCmd.FORWARD.ordinal()]);
-                        cmdBuilder.append(moves);
-                        cmdBuilder.append(',');
+                        if(moves > 8) {
+                            int movesDivider = moves / 2;
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[RoboCmd.FORWARD.ordinal()]);
+                            cmdBuilder.append(movesDivider);
+                            cmdBuilder.append(',');
+
+                            movesDivider = moves - movesDivider;
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[RoboCmd.FORWARD.ordinal()]);
+                            cmdBuilder.append(movesDivider);
+                            cmdBuilder.append(',');
+
+                        }
+                        else{
+                            cmdBuilder.append(RoboCmd.ArduinoCtrl.values()[RoboCmd.FORWARD.ordinal()]);
+                            cmdBuilder.append(moves);
+                            cmdBuilder.append(',');
+                        }
                     }
 
                     // turning
@@ -1396,7 +1425,7 @@ public class SimulatorNew extends Application {
                     netMgr.receive();   // to flush out sensor reading
                     //                   statusReceived.setText(netMgr.receive() + "\n");
 
-//                    netMgr.send("Q", "Ex");
+//                    netMgr.send("q", "Ex");
 //                    String msg;
 //                    do {
 //                        msg = netMgr.receive();
@@ -1444,6 +1473,7 @@ public class SimulatorNew extends Application {
             String cmdPart1 = "";
 
             for (int i = 0; i < strArr.length - 2; i++) {
+
                 cmdPart1 += strArr[i];
                 if(i != strArr.length-3)
                     cmdPart1+=",";

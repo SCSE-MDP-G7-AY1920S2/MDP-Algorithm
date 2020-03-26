@@ -860,6 +860,8 @@ public class Robot {
         if (tempSensorReading > 0 && tempSensorReading <= RobotConstants.CAM_MAX) {
             tempSensorRow = getSensorMap().get(sensorName).getRow();
             tempSensorCol = getSensorMap().get(sensorName).getCol();
+            System.out.println("tempsensorRow: "+tempSensorRow );
+            System.out.println("tempsensorCol: "+tempSensorCol );
             MapObjectSurface tempObsSurface = internalAddToSurfaceTaken(tempSensorRow, tempSensorCol, rowInc, colInc, tempSensorReading);
             System.out.println("add to surface taken");
             return tempObsSurface;
@@ -879,7 +881,13 @@ public class Robot {
         tempObsRow = tempRow + rowInc * incStep;
         tempObsCol = tempCol + colInc * incStep;
 
+        if(tempObsRow <0 || tempObsCol <0 )
+            return null;
+
         tempSurface = MapDirections.getOpposite(getRightCam().getCameraDir());
+
+        System.out.println("tempObsRow = " + tempObsRow);
+        System.out.println("tempObsCol = " + tempObsCol);
 
         tempObsSurface = new MapObjectSurface(tempObsRow, tempObsCol, tempSurface);
         surfTakenMap.put(tempObsSurface.toString(), tempObsSurface);

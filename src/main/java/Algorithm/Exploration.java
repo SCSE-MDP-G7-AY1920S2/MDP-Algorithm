@@ -236,12 +236,12 @@ public class Exploration {
                 prevDir = MapDirections.LEFT;
         }
 
-        if (stuckInLoop()) {
-            goToPoint(new Point(prevLocX, prevLocY));
-            turn(prevDir);
-
-            movement.clear();
-        }
+//        if (stuckInLoop()) {
+//            goToPoint(new Point(prevLocX, prevLocY));
+//            turn(prevDir);
+//
+//            movement.clear();
+//        }
     }
 
     public boolean nextToWall(){
